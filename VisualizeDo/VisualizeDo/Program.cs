@@ -1,14 +1,12 @@
 using VisualizeDo.Context;
 using VisualizeDo.Models;
+using VisualizeDo.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+AddServices();
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -41,4 +39,11 @@ void InitializeDb()
    } 
 }
 //InitializeDb();
+void AddServices()
+{
+    builder.Services.AddControllers();
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+    builder.Services.AddScoped<ICardRepository, CardRepository>();
+}
 app.Run();
