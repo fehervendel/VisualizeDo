@@ -40,5 +40,5 @@ void InitializeDb()
        db.SaveChanges();
    } 
 }
-InitializeDb();
+//InitializeDb();
 app.Run();

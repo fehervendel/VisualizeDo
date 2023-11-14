@@ -18,7 +18,6 @@
 
     <ItemGroup>
       <Folder Include="Contracts\" />
-      <Folder Include="Controllers\" />
       <Folder Include="Models\DTOs\" />
       <Folder Include="Repositories\" />
       <Folder Include="Services\Authentication\" />
