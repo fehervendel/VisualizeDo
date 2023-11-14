@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using VisualizeDo.Context;
 using VisualizeDo.Models;
+using VisualizeDo.Repositories;
 
 namespace VisualizeDo.Controllers;
 [ApiController]
@@ -9,18 +10,18 @@ namespace VisualizeDo.Controllers;
 public class VisualizeDoController : ControllerBase
 {
     private readonly ILogger<VisualizeDoController> _logger;
+    private ICardRepository _cardRepository;
 
-    public VisualizeDoController(ILogger<VisualizeDoController> logger)
+    public VisualizeDoController(ILogger<VisualizeDoController> logger, ICardRepository cardRepository)
     {
         _logger = logger;
+        _cardRepository = cardRepository;
     }
 
-    [HttpGet("GetAllTodos")]
-    public async Task<ActionResult<Card>> GetAllTodos()
+    [HttpGet("GetAllCards")]
+    public async Task<ActionResult<Card>> GetAllCards()
     {
-        await using var dbContext = new VisualizeDoContext();
-        var cards = await dbContext.Cards.ToListAsync();
-
+        var cards = await _cardRepository.GetAll();
         try
         {
             return Ok(cards);
