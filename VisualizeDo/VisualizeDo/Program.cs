@@ -47,6 +47,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();
@@ -80,7 +82,6 @@ void AddServices()
 {
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
     builder.Services.AddScoped<ICardRepository, CardRepository>();
     builder.Services.AddDbContext<VisualizeDoContext>();
     builder.Services.AddScoped<IAuthService, AuthService>();
