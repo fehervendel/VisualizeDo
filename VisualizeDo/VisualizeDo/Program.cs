@@ -1,9 +1,11 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using VisualizeDo.Context;
 using VisualizeDo.Models;
 using VisualizeDo.Repositories;
+using VisualizeDo.Services.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 var configBuilder = new ConfigurationBuilder()
@@ -17,6 +19,7 @@ var issuerSigningKey = configuration["JwtSettings:IssuerSigningKey"];
 // Add services to the container.
 AddServices();
 AddAuthentication();
+AddIdentity();
 
 var app = builder.Build();
 
@@ -33,22 +36,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-void InitializeDb()
-{
-   using var db = new VisualizeDoContext();
-   InitializeToDos();
-   
-   void InitializeToDos()
-   {
-       db.Add(new Card
-       {
-           Title = "Test2 database", Description = "Write 2nd test to see if the database connection is working as expected",
-           Priority = "High", Size = "Tiny"
-       });
-       db.SaveChanges();
-   } 
-}
-//InitializeDb();
+app.Run();
 
 void AddAuthentication()
 {
@@ -64,10 +52,6 @@ void AddAuthentication()
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                //ValidIssuer = jwtSettings["ValidIssuer"],
-                //ValidAudience = jwtSettings["ValidAudience"],
-                //IssuerSigningKey = new SymmetricSecurityKey(
-                //Encoding.UTF8.GetBytes(jwtSettings["IssuerSigningKey"])
                 ValidIssuer = validIssuer,
                 ValidAudience = validAudience,
                 IssuerSigningKey = new SymmetricSecurityKey(
@@ -84,5 +68,23 @@ void AddServices()
     builder.Services.AddSwaggerGen();
     builder.Services.AddScoped<ICardRepository, CardRepository>();
     builder.Services.AddDbContext<VisualizeDoContext>();
+    builder.Services.AddScoped<IAuthService, AuthService>();
+    builder.Services.AddScoped<ITokenService, TokenService>();
 }
-app.Run();
+
+void AddIdentity()
+{
+    builder.Services
+        .AddIdentityCore<IdentityUser>(options =>
+        {
+            options.SignIn.RequireConfirmedAccount = false;
+            options.User.RequireUniqueEmail = true;
+            options.Password.RequireDigit = false;
+            options.Password.RequiredLength = 6;
+            options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequireUppercase = false;
+            options.Password.RequireLowercase = false;
+        })
+        .AddRoles<IdentityRole>()
+        .AddEntityFrameworkStores<VisualizeDoContext>();
+}
