@@ -2,6 +2,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using VisualizeDo.Context;
 using VisualizeDo.Models;
 using VisualizeDo.Repositories;
@@ -20,8 +21,22 @@ var issuerSigningKey = configuration["JwtSettings:IssuerSigningKey"];
 AddServices();
 AddAuthentication();
 AddIdentity();
+ConfigureSwagger();
 
 var app = builder.Build();
+Cors();
+AddRoles();
+AddAdmin();
+
+void Cors()
+{
+    app.UseCors(builder =>
+    {
+        builder.AllowAnyOrigin(); 
+        builder.AllowAnyHeader();
+        builder.AllowAnyMethod();
+    });
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -87,4 +102,80 @@ void AddIdentity()
         })
         .AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<VisualizeDoContext>();
+}
+
+void ConfigureSwagger()
+{
+    builder.Services.AddSwaggerGen(option =>
+    {
+        option.SwaggerDoc("v1", new OpenApiInfo{ Title = "Demo API", Version = "v1"});
+        option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+        {
+            In = ParameterLocation.Header,
+            Description = "Please enter a valid token",
+            Name = "Authorization",
+            Type = SecuritySchemeType.Http,
+            BearerFormat = "JWT",
+            Scheme = "Bearer"
+        });
+        option.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                },
+                new string[]{}
+            }
+        });
+    });
+}
+
+void AddRoles()
+{
+    using var scope = app.Services.CreateScope();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+    var tAdmin = CreateAdminRole(roleManager);
+    tAdmin.Wait();
+
+    var tUser = CreateUserRole(roleManager);
+    tUser.Wait();
+}
+
+async Task CreateAdminRole(RoleManager<IdentityRole> roleManager)
+{
+    await roleManager.CreateAsync(new IdentityRole("Admin"));
+}
+
+async Task CreateUserRole(RoleManager<IdentityRole> roleManager)
+{
+    await roleManager.CreateAsync(new IdentityRole("User"));
+}
+
+void AddAdmin()
+{
+    var tAdmin = CreateAdminIfNotExists();
+    tAdmin.Wait();
+}
+
+async Task CreateAdminIfNotExists()
+{
+    using var scope = app.Services.CreateScope();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    var adminInDb = await userManager.FindByEmailAsync("admin@admin.com");
+    if (adminInDb == null)
+    {
+        var admin = new IdentityUser { UserName = "admin", Email = "admin@admin.com" };
+        var adminCreated = await userManager.CreateAsync(admin, "admin123");
+
+        if (adminCreated.Succeeded)
+        {
+            await userManager.AddToRoleAsync(admin, "Admin");
+        }
+    }
 }
