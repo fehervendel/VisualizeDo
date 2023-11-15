@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VisualizeDo.Context;
 using VisualizeDo.Models;
@@ -18,7 +19,7 @@ public class VisualizeDoController : ControllerBase
         _cardRepository = cardRepository;
     }
 
-    [HttpGet("GetAllCards")]
+    [HttpGet("GetAllCards"), Authorize(Roles = "User, Admin")]
     public async Task<ActionResult<Card>> GetAllCards()
     {
         var cards = await _cardRepository.GetAll();
