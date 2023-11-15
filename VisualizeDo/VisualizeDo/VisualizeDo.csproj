@@ -19,9 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Contracts\" />
       <Folder Include="Models\DTOs\" />
-      <Folder Include="Services\Authentication\" />
     </ItemGroup>
 
 </Project>
