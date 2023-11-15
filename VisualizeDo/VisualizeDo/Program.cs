@@ -83,5 +83,6 @@ void AddServices()
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
     builder.Services.AddScoped<ICardRepository, CardRepository>();
+    builder.Services.AddDbContext<VisualizeDoContext>();
 }
 app.Run();
