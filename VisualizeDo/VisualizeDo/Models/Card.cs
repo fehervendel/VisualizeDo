@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace VisualizeDo.Models;
 
@@ -10,4 +11,7 @@ public class Card
     public string? Description { get; set; }
     public string? Priority { get; set; }
     public string? Size { get; set; }
+    public int ListId { get; init; }
+    [JsonIgnore]
+    public List List { get; set; }
 }
