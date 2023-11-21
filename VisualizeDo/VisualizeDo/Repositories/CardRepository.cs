@@ -18,11 +18,22 @@ public class CardRepository : ICardRepository
         return await dbContext.Cards.FirstOrDefaultAsync(c => c.Id == id);
     }
 
-    public async  Task Add(Card card)
+    public async Task Add(Card card)
     {
         using var dbContext = new VisualizeDoContext();
-        dbContext.Add(card);
-        await dbContext.SaveChangesAsync();
+
+        var list = await dbContext.Lists.FindAsync(card.ListId);
+
+        if (list != null)
+        {
+            card.List = list;
+            dbContext.Add(card);
+            await dbContext.SaveChangesAsync();
+        }
+        else
+        {
+            throw new ArgumentException("List not found for provided List Id");
+        }
     }
 
     public async Task Update(Card card)
