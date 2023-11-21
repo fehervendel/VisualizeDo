@@ -87,6 +87,8 @@ void AddServices()
     builder.Services.AddScoped<IAuthService, AuthService>();
     builder.Services.AddScoped<ITokenService, TokenService>();
     builder.Services.AddScoped<IUserRepository, UserRepository>();
+    builder.Services.AddScoped<IBoardRepository, BoardRepository>();
+    builder.Services.AddScoped<IListRepository, ListRepository>();
 }
 
 void AddIdentity()
