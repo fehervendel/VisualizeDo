@@ -86,6 +86,7 @@ void AddServices()
     builder.Services.AddDbContext<VisualizeDoContext>();
     builder.Services.AddScoped<IAuthService, AuthService>();
     builder.Services.AddScoped<ITokenService, TokenService>();
+    builder.Services.AddScoped<IUserRepository, UserRepository>();
 }
 
 void AddIdentity()
