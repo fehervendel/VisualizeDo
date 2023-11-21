@@ -220,6 +220,27 @@ namespace VisualizeDo.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("VisualizeDo.Models.Board", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Boards");
+                });
+
             modelBuilder.Entity("VisualizeDo.Models.Card", b =>
                 {
                     b.Property<int>("Id")
@@ -230,6 +251,9 @@ namespace VisualizeDo.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ListId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Priority")
                         .HasColumnType("nvarchar(max)");
@@ -242,7 +266,30 @@ namespace VisualizeDo.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ListId");
+
                     b.ToTable("Cards");
+                });
+
+            modelBuilder.Entity("VisualizeDo.Models.List", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("BoardId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BoardId");
+
+                    b.ToTable("Lists");
                 });
 
             modelBuilder.Entity("VisualizeDo.Models.User", b =>
@@ -322,6 +369,39 @@ namespace VisualizeDo.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("VisualizeDo.Models.Board", b =>
+                {
+                    b.HasOne("VisualizeDo.Models.User", "User")
+                        .WithMany("Boards")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("VisualizeDo.Models.Card", b =>
+                {
+                    b.HasOne("VisualizeDo.Models.List", "List")
+                        .WithMany("Cards")
+                        .HasForeignKey("ListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("List");
+                });
+
+            modelBuilder.Entity("VisualizeDo.Models.List", b =>
+                {
+                    b.HasOne("VisualizeDo.Models.Board", "Board")
+                        .WithMany("Lists")
+                        .HasForeignKey("BoardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Board");
+                });
+
             modelBuilder.Entity("VisualizeDo.Models.User", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
@@ -330,6 +410,21 @@ namespace VisualizeDo.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("IdentityUser");
+                });
+
+            modelBuilder.Entity("VisualizeDo.Models.Board", b =>
+                {
+                    b.Navigation("Lists");
+                });
+
+            modelBuilder.Entity("VisualizeDo.Models.List", b =>
+                {
+                    b.Navigation("Cards");
+                });
+
+            modelBuilder.Entity("VisualizeDo.Models.User", b =>
+                {
+                    b.Navigation("Boards");
                 });
 #pragma warning restore 612, 618
         }
