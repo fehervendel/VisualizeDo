@@ -4,6 +4,7 @@ using VisualizeDo.Contracts;
 using VisualizeDo.Repositories;
 using VisualizeDo.Services.Authentication;
 using VisualizeDo.Contracts;
+using VisualizeDo.Models;
 using VisualizeDo.Models.DTOs;
 using VisualizeDo.Services.Authentication;
 
@@ -14,10 +15,12 @@ namespace VisualizeDo.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authenticationService;
+    private readonly IUserRepository _userRepository;
 
-    public AuthController(IAuthService authenticationService)
+    public AuthController(IAuthService authenticationService, IUserRepository userRepository)
     {
         _authenticationService = authenticationService;
+        _userRepository = userRepository;
     }
 
     [HttpPost("Register")]
@@ -35,6 +38,15 @@ public class AuthController : ControllerBase
             AddErrors(result);
             return BadRequest(ModelState);
         }
+
+        User user = new User
+        {
+            Name = request.Username,
+            EmailAddress = request.Email,
+            IdentityUserId = result.IdentityUserId
+        };
+
+        await _userRepository.Add(user);
 
         return CreatedAtAction(nameof(Register), new RegistrationResponse(result.Email, result.UserName));
     }
@@ -54,6 +66,15 @@ public class AuthController : ControllerBase
             AddErrors(result);
             return BadRequest(ModelState);
         }
+        
+        User user = new User
+        {
+            Name = request.Username,
+            EmailAddress = request.Email,
+            IdentityUserId = result.IdentityUserId
+        };
+
+        await _userRepository.Add(user);
 
         return CreatedAtAction(nameof(Register), new RegistrationResponse(result.Email, result.UserName));
     }
