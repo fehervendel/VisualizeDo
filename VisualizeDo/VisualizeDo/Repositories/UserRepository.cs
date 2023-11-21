@@ -17,13 +17,16 @@ public class UserRepository : IUserRepository
     public async Task<IEnumerable<User>> GetAll()
     {
         using var dbContext = new VisualizeDoContext();
-        return await dbContext.Users.ToListAsync();
+        return await dbContext.Users.
+            Include(u => u.Boards).
+            ToListAsync();
     }
 
     public async Task<User?> GetById(int id)
     {
         using var dbContext = new VisualizeDoContext();
-        return await dbContext.Users.FirstOrDefaultAsync(e => e.Id == id);
+        return await dbContext.Users.Include(u => u.Boards).
+            ThenInclude(b => b.Lists).ThenInclude(l => l.Cards).FirstOrDefaultAsync(e => e.Id == id);
     }
 
     public async Task Add(User user)
