@@ -154,7 +154,7 @@ public class VisualizeDoController : ControllerBase
             return NotFound("Error getting users");
         }
     }
-    
+
     [HttpDelete("DeleteListById")]//, Authorize(Roles = "Admin")
     public async Task<IActionResult> DeleteListById(int id)
     {
@@ -213,6 +213,21 @@ public class VisualizeDoController : ControllerBase
         {
             _logger.LogError(e, "Error getting card");
             return NotFound("Error getting card");
+        }
+    }
+
+    [HttpPut("ChangeCardsListById")] //, Authorize(Roles = "Admin, User")
+    public async Task<IActionResult> ChangeCardsListById(int cardId, int listId)
+    {
+        try
+        {
+            await _cardRepository.ChangeList(cardId, listId);
+            return Ok();
+        }
+        catch(Exception e)
+        {
+            _logger.LogError(e, "Error changing List of Card");
+            return StatusCode(500, "Internal server Error");
         }
     }
     
