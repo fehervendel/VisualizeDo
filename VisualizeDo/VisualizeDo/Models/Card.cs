@@ -11,7 +11,7 @@ public class Card
     public string? Description { get; set; }
     public string? Priority { get; set; }
     public string? Size { get; set; }
-    public int ListId { get; init; }
+    public int ListId { get; set; }
     [JsonIgnore]
     public List List { get; set; }
 }
