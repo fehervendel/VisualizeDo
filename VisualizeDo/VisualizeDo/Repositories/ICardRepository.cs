@@ -9,4 +9,5 @@ public interface ICardRepository
     Task Add(Card card);
     Task Update(Card card);
     Task DeleteById(int id);
+    Task ChangeList(int cardId, int listId);
 }
