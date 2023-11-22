@@ -54,22 +54,7 @@ public class VisualizeDoController : ControllerBase
             return NotFound("Error getting user");
         }
     }
-    
-    [HttpGet("GetBoardById")]//, Authorize(Roles = "User, Admin")
-    public async Task<ActionResult<User>> GetBoardById(int id)
-    {
-        var board = await _boardRepository.GetById(id);
-        try
-        {
-            return Ok(board);
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Error getting board");
-            return NotFound("Error getting board");
-        }
-    }
-    
+
     [HttpPost("AddBoard")]
     public async Task<IActionResult> AddBoard(int userId, string name)
     {
@@ -95,6 +80,36 @@ public class VisualizeDoController : ControllerBase
         {
             _logger.LogError(e, "Error adding new board :("); 
             return StatusCode(500, "Internal Server Error");
+        }
+    }
+    
+    [HttpGet("GetBoardById")]//, Authorize(Roles = "User, Admin")
+    public async Task<ActionResult<User>> GetBoardById(int id)
+    {
+        var board = await _boardRepository.GetById(id);
+        try
+        {
+            return Ok(board);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error getting board");
+            return NotFound("Error getting board");
+        }
+    }
+    
+    [HttpDelete("DeleteBoardById")]//, Authorize(Roles = "Admin")
+    public async Task<IActionResult> DeleteBoardById(int id)
+    {
+        try
+        {
+            await _boardRepository.DeleteById(id);
+            return Ok($"Board with id: {id} has been deleted!");
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error deleting board:(");
+            return StatusCode(500, "Internal server Error");
         }
     }
     
@@ -137,6 +152,21 @@ public class VisualizeDoController : ControllerBase
         {
             _logger.LogError(e, "Error getting users");
             return NotFound("Error getting users");
+        }
+    }
+    
+    [HttpDelete("DeleteListById")]//, Authorize(Roles = "Admin")
+    public async Task<IActionResult> DeleteListById(int id)
+    {
+        try
+        {
+            await _listRepository.DeleteById(id);
+            return Ok($"List with id: {id} has been deleted!");
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error deleting list:(");
+            return StatusCode(500, "Internal server Error");
         }
     }
     
@@ -183,6 +213,21 @@ public class VisualizeDoController : ControllerBase
         {
             _logger.LogError(e, "Error getting card");
             return NotFound("Error getting card");
+        }
+    }
+    
+    [HttpDelete("DeleteCardById")]//, Authorize(Roles = "Admin")
+    public async Task<IActionResult> DeleteCardById(int id)
+    {
+        try
+        {
+            await _cardRepository.DeleteById(id);
+            return Ok($"Card with id: {id} has been deleted!");
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error deleting card:(");
+            return StatusCode(500, "Internal server Error");
         }
     }
 }
