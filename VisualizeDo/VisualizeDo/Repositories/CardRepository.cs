@@ -53,4 +53,23 @@ public class CardRepository : ICardRepository
             await dbContext.SaveChangesAsync();
         }
     }
+
+    public async Task ChangeList(int cardId, int listId)
+    {
+        using var dbContext = new VisualizeDoContext();
+
+        Card? cardToChange = await dbContext.Cards.FirstOrDefaultAsync(c => c.Id == cardId);
+        List? targetList = await dbContext.Lists.FirstOrDefaultAsync(l => l.Id == listId);
+        if ((cardToChange != null) && (targetList != null))
+        {
+            cardToChange.ListId = targetList.Id;
+            cardToChange.List = targetList;
+            dbContext.Update(cardToChange);
+            await dbContext.SaveChangesAsync();
+        }
+        else
+        {
+            throw new ArgumentException("Card or List not found for provided Id");
+        }
+    }
 }
