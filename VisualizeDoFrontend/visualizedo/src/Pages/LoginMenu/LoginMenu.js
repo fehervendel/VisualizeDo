@@ -3,7 +3,8 @@ import Registration from "../../Components/Registration";
 import { useState } from "react";
 import Cookies from "js-cookie";
 import API_URL from "../config";
-import "./LoginMenu.css"
+import "./LoginMenu.css";
+import todoListPreview from "../../images/todoList.png"
 
 function LoginMenu() {
     const [isRegistrationClicked, setIsRegistrationClicked] = useState(false);
@@ -134,7 +135,9 @@ function LoginMenu() {
         setPassowrdWarning("");
       }
 
-      return (<div><div className="welcome-message">
+      return (<div className="main-container">
+        <div className="left-side">
+          <div className="welcome-message">
         Welcome! Please {isRegistrationClicked ? 'Register' : 'Login'}
         </div>
         <p className="register-message">{registrationSuccess ? ("Successful registration! Log in.") : (null)}</p>
@@ -186,7 +189,17 @@ function LoginMenu() {
         </div>
       )}
     </div>
+    </div>
+    <div className="right-side">
+      <div className="image-container">
+<img src={todoListPreview} alt="Todolist preview" className="todoListPreview"></img>
+</div>
+    <div className="footer-container">
+      <h2 className="footer">VisualizeDo - Visualize your todos!</h2>
+      </div>
+    </div>
         </div>);
 }
 
 export default LoginMenu;
+
