@@ -1,13 +1,15 @@
 import './App.css';
 import LoginMenu from './Pages/LoginMenu/LoginMenu';
 import Menu from './Pages/Menu';
+import Cookies from 'js-cookie';
 
 function App() {
-  const isLoggedIn = false;
+  const token = null;//Cookies.get("userToken");
+  console.log(token);
 
   return (
     <div className="App">
-      {isLoggedIn ? <Menu/> : <LoginMenu/>}
+      {token === null ?  <LoginMenu/> : <Menu/>}
     </div>
   );
 }
