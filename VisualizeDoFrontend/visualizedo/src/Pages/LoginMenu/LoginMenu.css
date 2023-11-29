@@ -4,6 +4,7 @@
   width: 100%;
   height: 100%;
   justify-content: space-between;
+  background-color: #e9e9e9;
 }
 
 .left-side {
@@ -30,6 +31,7 @@
   background: rgb(229,33,246);
   background: linear-gradient(13deg, rgba(229,33,246,0.85) 18%, rgba(0,168,255,0.8547794117647058) 61%, rgba(0,255,239,0.8547794117647058) 100%);
   border-bottom: 2px solid #ccc;
+  border-bottom-left-radius: 5vh;
 }
 
 .todoListPreview {
@@ -45,7 +47,7 @@
   align-items: center;
   width: 100%;
   height: 20%;
-  overflow: hidden;
+  position: relative;
 }
 
 .register-container {
@@ -138,7 +140,12 @@
   }
 
   .footer {
-    font-size: 3vw;  
+    font-size: 3.3vw;
+    font-style: italic;
+    color: rgb(7, 0, 109);
+    text-shadow: 10px 5px 10px rgba(0, 0, 0, 0.9);
+    font-weight: 800;
+    -webkit-text-stroke: 2px yellow;
   }
 
   @media screen and (max-width: 550px) {
