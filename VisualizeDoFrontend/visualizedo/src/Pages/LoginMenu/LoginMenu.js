@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 import API_URL from "../config";
 import "./LoginMenu.css";
 import todoListPreview from "../../images/todoList.png"
+import { useNavigate } from "react-router-dom";
 
 function LoginMenu() {
     const [isRegistrationClicked, setIsRegistrationClicked] = useState(false);
@@ -12,12 +13,13 @@ function LoginMenu() {
     const [saveEmail, setSaveEmail] = useState("");
     const [savePassword, setSavePassword] = useState("");
     const [userNameWarning, setUserNameWarning] = useState("");
-    const token = Cookies.get("userToken");
+    //const token = Cookies.get("userToken");
     const [emailWarning, setEmailWarning] = useState("");
     const [passwordWarning, setPassowrdWarning] = useState("");
     const [registrationSuccess, setRegistrationSuccess] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const warnings = [userNameWarning, emailWarning, passwordWarning];
+    const navigate = useNavigate();
 
     const inputFields = [
         {className: "userName", type: "text", label: "Username:", name:"userName"},
@@ -53,10 +55,11 @@ function LoginMenu() {
                 Cookies.set("userUserName", data.userName, { expires: 10 });
                 Cookies.set("userToken", data.token, { expires: 10 });
 
-            console.log("Login response:", data);             
+            console.log("Login response:", data);
               const tokenPayload = JSON.parse(atob(data.token.split('.')[1]));
               const userRole = tokenPayload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
               Cookies.set("userRole", userRole, { expires: 10 });
+              navigate("/Menu");
             } else {
                 if(data["Bad credentials"][0] === "Invalid email"){
                   setEmailWarning(data["Bad credentials"][0])
