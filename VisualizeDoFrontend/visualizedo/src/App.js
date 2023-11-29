@@ -1,17 +1,21 @@
 import './App.css';
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 import LoginMenu from './Pages/LoginMenu/LoginMenu';
 import Menu from './Pages/Menu';
-import Cookies from 'js-cookie';
+import Layout from './Components/Layout';
 
 function App() {
-  const token = null;//Cookies.get("userToken");
-  console.log(token);
-
-  return (
-    <div className="App">
-      {token === null ?  <LoginMenu/> : <Menu/>}
-    </div>
-  );
+return (
+  <BrowserRouter>
+  <Layout/>
+    <Routes>
+      <Route path="/" element={<LoginMenu/>}></Route>
+      <Route path="/Menu" element={<Menu/>}></Route>
+    </Routes>
+  </BrowserRouter>
+)
 }
 
-export default App;
+export default App
