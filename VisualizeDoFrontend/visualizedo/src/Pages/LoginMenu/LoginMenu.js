@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Registration from "../../Components/Registration";
 import { useState } from "react";
 import Cookies from "js-cookie";
 import API_URL from "../config";
 import "./LoginMenu.css";
-import todoListPreview from "../../images/todoList.png"
+import todoList from "../../images/todoList.png"
 import { useNavigate } from "react-router-dom";
+import todoList2 from "../../images/todoList.jpg";
+import todoList3 from "../../images/todoList3.png";
+import { useRef } from "react";
 
 function LoginMenu() {
     const [isRegistrationClicked, setIsRegistrationClicked] = useState(false);
@@ -20,6 +23,9 @@ function LoginMenu() {
     const [showPassword, setShowPassword] = useState(false);
     const warnings = [userNameWarning, emailWarning, passwordWarning];
     const navigate = useNavigate();
+    const images = [todoList, todoList2, todoList3];
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const intervalRef = useRef(null);
 
     const inputFields = [
         {className: "userName", type: "text", label: "Username:", name:"userName"},
@@ -138,6 +144,33 @@ function LoginMenu() {
         setPassowrdWarning("");
       }
 
+      const restartInterval = () => {
+        clearInterval(intervalRef.current);
+        intervalRef.current = setInterval(() => {
+          setCurrentImageIndex((prevIndex) => {
+            if (prevIndex === images.length - 1) {
+              return 0;
+            } else {
+              return prevIndex + 1;
+            }
+          });
+        }, 7000);
+      };
+
+      useEffect(() => {
+        
+        restartInterval();
+    
+        return () => {
+          clearInterval(intervalRef.current);
+        };
+      }, []);
+    
+      const handleDotClick = (index) => {
+        setCurrentImageIndex(index);
+        restartInterval();
+      }
+
       return (<div className="main-container">
         <div className="left-side">
           <div className="welcome-message">
@@ -195,8 +228,26 @@ function LoginMenu() {
     </div>
     <div className="right-side">
       <div className="image-container">
-<img src={todoListPreview} alt="Todolist preview" className="todoListPreview"></img>
+      <div className="slider" style={{ transform: `translateX(calc(-100% * ${currentImageIndex}))` }}>
+          {images.map((image, index) => (
+           <img
+            key={index}
+            src={image}
+            alt={`Image ${index + 1}`}
+            className={index === currentImageIndex ? 'active' : ''}
+              />
+          ))}
 </div>
+</div>
+<div className="dots-container">
+    {images.map((_, index) => (
+      <span
+        key={index}
+        className={`dot ${index === currentImageIndex ? 'active-dot' : ''}`}
+        onClick={() => handleDotClick(index)}
+      ></span>
+    ))}
+  </div>
     <div className="footer-container">
       <h2 className="footer">VisualizeDo - Visualize your todos!</h2>
       </div>
@@ -205,4 +256,3 @@ function LoginMenu() {
 }
 
 export default LoginMenu;
-
