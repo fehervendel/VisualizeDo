@@ -54,6 +54,21 @@ public class VisualizeDoController : ControllerBase
             return NotFound("Error getting user");
         }
     }
+    
+    [HttpGet("GetUserByEmail")]//, Authorize(Roles = "User, Admin")
+    public async Task<ActionResult<User>> GetUserByEmail(string email)
+    {
+        var user = await _userRepository.GetByEmail(email);
+        try
+        {
+            return Ok(user);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error getting user");
+            return NotFound("Error getting user");
+        }
+    }
 
     [HttpPost("AddBoard")]
     public async Task<IActionResult> AddBoard(int userId, string name)
