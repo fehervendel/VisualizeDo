@@ -1,0 +1,48 @@
+.list-container {
+    display:inline-flex;
+    flex-direction: column;
+    vertical-align: top;
+    margin-right: 20px;
+    margin-left: 20px;
+    max-height: 400px;
+    width: 35vh;
+    background-color: rgb(180, 180, 180);
+    flex: 0 0 auto;
+    position: relative;
+    border: 2px solid black;
+    border-radius: 10px;
+  }
+
+  .list-container h4{
+    position: relative;
+    align-self: center;
+    width: 100px;
+  }
+  
+  .cards-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .card {
+    margin-bottom: 10px;
+    border: 1px solid #ffffff;
+    border-radius: 10px;
+    margin: 10px;
+    padding: 10px;
+  }
+
+  .all-list-container {
+    overflow-x:auto;
+    max-width: 1500px;
+    display: flex;
+  }
+
+  .div-container {
+    min-height: 300px;
+    overflow-y: auto;
+  }
+
+  .main-div{
+
+  }
