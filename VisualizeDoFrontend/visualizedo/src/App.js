@@ -3,7 +3,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import LoginMenu from './Pages/LoginMenu/LoginMenu';
-import Menu from './Pages/Menu';
+import Menu from './Pages/Menu/Menu';
 import Layout from './Components/Layout';
 
 function App() {

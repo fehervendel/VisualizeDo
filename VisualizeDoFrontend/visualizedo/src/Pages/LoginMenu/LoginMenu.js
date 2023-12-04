@@ -249,7 +249,6 @@ function LoginMenu() {
     ))}
   </div>
     <div className="footer-container">
-      <h2 className="footer">VisualizeDo - Visualize your todos!</h2>
       </div>
     </div>
         </div>);
