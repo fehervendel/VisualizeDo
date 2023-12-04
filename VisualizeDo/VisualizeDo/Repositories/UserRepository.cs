@@ -28,6 +28,13 @@ public class UserRepository : IUserRepository
         return await dbContext.Users.Include(u => u.Boards).
             ThenInclude(b => b.Lists).ThenInclude(l => l.Cards).FirstOrDefaultAsync(e => e.Id == id);
     }
+    
+    public async Task<User?> GetByEmail(string email)
+    {
+        using var dbContext = new VisualizeDoContext();
+        return await dbContext.Users.Include(u => u.Boards).
+            ThenInclude(b => b.Lists).ThenInclude(l => l.Cards).FirstOrDefaultAsync(e => e.EmailAddress == email);
+    }
 
     public async Task Add(User user)
     {
