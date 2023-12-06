@@ -4,14 +4,16 @@
     vertical-align: top;
     margin-right: 20px;
     margin-left: 20px;
-    width: 35vh;
+    width: 18vw;
     background-color: rgb(180, 180, 180);
     flex: 0 0 auto;
     position: relative;
     border: 2px solid black;
     border-radius: 10px;
     min-height: 60vh;
-  }
+    max-height: 60vh;
+    overflow-y: auto;
+    }
 
   .list-container h4{
     position: relative;
@@ -30,11 +32,12 @@
     border-radius: 10px;
     margin: 10px;
     padding: 10px;
+    background-color:azure;
   }
 
   .all-list-container {
-    overflow-x:auto;
-    width: 90vw;
+    overflow-x: auto;
+    width: 80vw;
     display: flex;
     border: 2px solid black;
     padding-top: 10px;
