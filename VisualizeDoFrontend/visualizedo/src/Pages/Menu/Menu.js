@@ -58,14 +58,14 @@ function Menu() {
             {selectedBoard && (<div className="board-div">
                 <h3>{selectedBoard.name}</h3>
                     <div className="all-list-container">
-                    
+                    <DragDropContext>
+
                     {selectedBoard.lists.map((list, index) =>(
                         <div className="list-container" key={list.id}>
                             <div className="list-head">
                                 <h4>{list.name}</h4>
                                 <button className="add-button">Add card</button>
                             </div>
-                            <DragDropContext>
                                 <Droppable droppableId="cards">
                                     {(provided) => (
                         <div className="div-container" {...provided.droppableProps} ref={provided.innerRef}>
@@ -85,9 +85,9 @@ function Menu() {
                         </div>
                         )}
                         </Droppable>
-                        </DragDropContext>
                         </div>
                     ))}
+                     </DragDropContext>
                 </div> 
                 </div>
             )}    
