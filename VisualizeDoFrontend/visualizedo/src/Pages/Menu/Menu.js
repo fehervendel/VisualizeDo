@@ -14,9 +14,8 @@ function Menu() {
     const [lists, setLists] = useState(null);
     const [selectedBoard, setSelectedBoard] = useState(null);
     //console.log(selectedBoard);
-    const [selectedBoardId, setSelectedBoardId] = useState(null);
 
-    const fetchData = async () => {
+    const fetchBoard = async () => {
         try {
             const response = await fetch(`${API_URL}/VisualizeDo/GetUserByEmail?email=${userEmail}`, {
                 method: "GET",
@@ -38,8 +37,30 @@ function Menu() {
     };
 
     useEffect(() => {
-        fetchData();
+        fetchBoard();
     }, [userEmail])
+
+    const fetchListByBoardId = async (id) => {
+        try {
+            const response = await fetch(`${API_URL}/VisualizeDo/GetListsByBoardId?id=${id}`, {
+                method: "GET",
+                headers: {
+                    //Authorization: `Bearer ${token}`
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+            });
+            if(response.ok){
+                const jsonData = await response.json();
+            setLists(jsonData);
+            }
+            
+            //console.log("userboards" + jsonData);
+        } catch (err) {
+            console.error(err);
+        }
+
+    };
 
     const changeCardListById = async (cardId, listId) => {
         try {
@@ -49,24 +70,29 @@ function Menu() {
                     'Content-Type': 'application/json',
                 },
             })
-            console.log("Successful request", response);
-            if(response.ok){
-                //fetchData();
-                let tempBoard = JSON.parse(JSON.stringify(selectedBoard));
-        
-                let originalColumn = tempBoard.lists.filter((list) => list.cards.find((card) => card.id == cardId))[0];
-                let updatedSourceColumn = originalColumn.cards.filter((card) => card.id != cardId);
-                originalColumn.cards = updatedSourceColumn;
-                
-                let movedCard = originalColumn.cards.filter((card) => card.id == cardId)[0];
-                let updatedDestinationColumn = tempBoard.lists.filter((list) => list.id == listId)[0];
-                updatedDestinationColumn.cards.push(movedCard);
-                //console.log(updatedDestinationColumn);
-                console.log("temp1", tempBoard);
-                tempBoard.lists = tempBoard.lists.map((list) => list.id == originalColumn.id ? (originalColumn) : (list));
-                console.log("temp2", tempBoard);
-                //console.log(updatedSourceColumn);
-                setSelectedBoard(tempBoard);
+            //console.log("Successful request", response);
+            if (response.ok) {
+
+            fetchListByBoardId(selectedBoard.id);
+            //     //fetchBoard();
+            //     let tempBoard = JSON.parse(JSON.stringify(selectedBoard));
+
+            //     let originalColumn = lists.find((list) => list.cards.find((card) => card.id == cardId)); // This is the column where we took a card from
+            //     let updatedSourceColumn = originalColumn.cards.filter((card) => card.id != cardId); // These are the remaining cards of the column where we took a card from
+            //     let remainingColumnCards = [];
+            //     updatedSourceColumn.map((card) => remainingColumnCards.push(card)); // Pushing the remaining cards into an array
+            //     //let updatedList = await fetchListById(originalColumn.id);
+            //     //newSourceColumn.cards = remainingColumnCards; // Changing the source column's cards to the remaining cards
+
+            //     let movedCard = originalColumn.cards.find((card) => card.id == cardId); // This is the card we moved
+            //     let updatedDestinationColumn = tempBoard.lists.find((list) => list.id == listId); // This is the destination column
+            //     updatedDestinationColumn.cards.push(movedCard); // Here we just add the card to the destination column
+
+            //     //console.log("temp1", tempBoard);
+            //     tempBoard.lists = tempBoard.lists.map((list) => list.id == listId ? (originalColumn) : (list)); // If the list is the updated list, we render it, else we render the list
+            //    //console.log("temp2", tempBoard);
+
+            //     setSelectedBoard(tempBoard);
             }
         } catch (err) {
             console.error(err);
@@ -76,12 +102,12 @@ function Menu() {
 
     const handleBoardChange = (e) => {
         const boardId = e.target.value;
-        console.log(e.target.value);
-        setSelectedBoardId(boardId);
+        //console.log(e.target.value);
         const selected = boards.find((board) => board.id == boardId);
         setSelectedBoard(selected);
+        //selectedBoard.lists.map((list) => list.id)
         if (selected != undefined) {
-            setLists(selected.lists);
+         fetchListByBoardId(boardId);
         }
     }
 
@@ -92,7 +118,7 @@ function Menu() {
         }
         const cardId = parseInt(result.draggableId);
         const listId = parseInt(destination.droppableId);
-
+        
         changeCardListById(cardId, listId);
     }
 
@@ -113,7 +139,7 @@ function Menu() {
                         <div className="board-div">
                             <h3>{selectedBoard.name}</h3>
                             <div className="all-list-container">
-                                {selectedBoard.lists.map((list, index) => (
+                                {lists && lists.map((list, index) => (
                                     <Droppable key={list.id} droppableId={list.id.toString()}>
                                         {(provided) => (
                                             <div className="list-container" ref={provided.innerRef} {...provided.droppableProps}>
