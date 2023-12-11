@@ -50,16 +50,25 @@ function Menu() {
                     'Accept': 'application/json',
                 },
             });
-            if(response.ok){
+            if (response.ok) {
                 const jsonData = await response.json();
-            setLists(jsonData);
+                setLists(jsonData);
             }
-            
+
             //console.log("userboards" + jsonData);
         } catch (err) {
             console.error(err);
         }
 
+    };
+
+    const deepCopyLists = (lists) => {
+        return lists.map((list) => {
+            return {
+                ...list,
+                cards: list.cards.map((card) => ({ ...card })),
+            };
+        });
     };
 
     const changeCardListById = async (cardId, listId) => {
@@ -71,29 +80,6 @@ function Menu() {
                 },
             })
             //console.log("Successful request", response);
-            if (response.ok) {
-
-            fetchListByBoardId(selectedBoard.id);
-            //     //fetchBoard();
-            //     let tempBoard = JSON.parse(JSON.stringify(selectedBoard));
-
-            //     let originalColumn = lists.find((list) => list.cards.find((card) => card.id == cardId)); // This is the column where we took a card from
-            //     let updatedSourceColumn = originalColumn.cards.filter((card) => card.id != cardId); // These are the remaining cards of the column where we took a card from
-            //     let remainingColumnCards = [];
-            //     updatedSourceColumn.map((card) => remainingColumnCards.push(card)); // Pushing the remaining cards into an array
-            //     //let updatedList = await fetchListById(originalColumn.id);
-            //     //newSourceColumn.cards = remainingColumnCards; // Changing the source column's cards to the remaining cards
-
-            //     let movedCard = originalColumn.cards.find((card) => card.id == cardId); // This is the card we moved
-            //     let updatedDestinationColumn = tempBoard.lists.find((list) => list.id == listId); // This is the destination column
-            //     updatedDestinationColumn.cards.push(movedCard); // Here we just add the card to the destination column
-
-            //     //console.log("temp1", tempBoard);
-            //     tempBoard.lists = tempBoard.lists.map((list) => list.id == listId ? (originalColumn) : (list)); // If the list is the updated list, we render it, else we render the list
-            //    //console.log("temp2", tempBoard);
-
-            //     setSelectedBoard(tempBoard);
-            }
         } catch (err) {
             console.error(err);
         }
@@ -107,7 +93,7 @@ function Menu() {
         setSelectedBoard(selected);
         //selectedBoard.lists.map((list) => list.id)
         if (selected != undefined) {
-         fetchListByBoardId(boardId);
+            fetchListByBoardId(boardId);
         }
     }
 
@@ -118,7 +104,20 @@ function Menu() {
         }
         const cardId = parseInt(result.draggableId);
         const listId = parseInt(destination.droppableId);
-        
+        //card swap logic
+        let tempLists = deepCopyLists(lists);
+        let originalColumn = tempLists.find((list) => list.cards.find((card) => card.id == cardId)); // This is the column where we took a card from
+        let movedCard = originalColumn.cards.find((card) => card.id == cardId); // This is the card we moved
+        let updatedSourceColumn = originalColumn.cards.filter((card) => card.id != cardId); // These are the remaining cards of the column where we took a card from
+        originalColumn.cards = updatedSourceColumn;
+
+        let updatedDestinationColumn = tempLists.find((list) => list.id == listId); // This is the destination column
+        updatedDestinationColumn.cards.push(movedCard); // Here we just add the card to the destination column
+
+        console.log("new board:", tempLists);
+        setLists(tempLists);
+        //card swap logic end
+
         changeCardListById(cardId, listId);
     }
 
