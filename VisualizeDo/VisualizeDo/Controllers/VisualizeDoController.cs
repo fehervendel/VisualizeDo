@@ -99,7 +99,7 @@ public class VisualizeDoController : ControllerBase
     }
     
     [HttpGet("GetBoardById")]//, Authorize(Roles = "User, Admin")
-    public async Task<ActionResult<User>> GetBoardById(int id)
+    public async Task<IActionResult> GetBoardById(int id)
     {
         var board = await _boardRepository.GetById(id);
         try
@@ -156,7 +156,7 @@ public class VisualizeDoController : ControllerBase
         }
     }
     [HttpGet("GetListById")]//, Authorize(Roles = "User, Admin")
-    public async Task<ActionResult<User>> GetListById(int id)
+    public async Task<IActionResult> GetListById(int id)
     {
         var list = await _listRepository.GetById(id);
         try
@@ -171,7 +171,7 @@ public class VisualizeDoController : ControllerBase
     }
     
     [HttpGet("GetListsByBoardId")]//, Authorize(Roles = "User, Admin")
-    public async Task<ActionResult<List<List>>> GetListByBoardId(int id)
+    public async Task<IActionResult> GetListByBoardId(int id)
     {
         var list = await _listRepository.GetByBoardId(id);
         try
@@ -232,7 +232,7 @@ public class VisualizeDoController : ControllerBase
     }
     
     [HttpGet("GetCardById")]//, Authorize(Roles = "User, Admin")
-    public async Task<ActionResult<User>> GetCardById(int id)
+    public async Task<IActionResult> GetCardById(int id)
     {
         var card = await _cardRepository.GetById(id);
         try
