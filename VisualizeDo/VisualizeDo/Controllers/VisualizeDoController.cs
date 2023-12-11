@@ -169,6 +169,21 @@ public class VisualizeDoController : ControllerBase
             return NotFound("Error getting users");
         }
     }
+    
+    [HttpGet("GetListsByBoardId")]//, Authorize(Roles = "User, Admin")
+    public async Task<ActionResult<List<List>>> GetListByBoardId(int id)
+    {
+        var list = await _listRepository.GetByBoardId(id);
+        try
+        {
+            return Ok(list);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error getting users");
+            return NotFound("Error getting users");
+        }
+    }
 
     [HttpDelete("DeleteListById")]//, Authorize(Roles = "Admin")
     public async Task<IActionResult> DeleteListById(int id)

@@ -61,7 +61,7 @@ function LoginMenu() {
                 Cookies.set("userUserName", data.userName, { expires: 10 });
                 Cookies.set("userToken", data.token, { expires: 10 });
 
-            console.log("Login response:", data);
+            //console.log("Login response:", data);
               const tokenPayload = JSON.parse(atob(data.token.split('.')[1]));
               const userRole = tokenPayload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
               Cookies.set("userRole", userRole, { expires: 10 });

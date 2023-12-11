@@ -9,4 +9,5 @@ public interface IListRepository
     Task Add(List list);
     Task Update(List list);
     Task DeleteById(int id);
+    Task<List<List>> GetByBoardId(int id);
 }
