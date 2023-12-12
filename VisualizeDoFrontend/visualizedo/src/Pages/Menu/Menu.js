@@ -123,7 +123,7 @@ function Menu() {
 
     return (
         <div className="main-div">
-            <select onChange={(e) => handleBoardChange(e)}>
+            <select className='selectBar' onChange={(e) => handleBoardChange(e)}>
                 <option>Choose one of your boards...</option>
                 {boards &&
                     boards.map((board, index) => (
@@ -136,7 +136,7 @@ function Menu() {
                 selectedBoard && (
                     <DragDropContext onDragEnd={handleDragEnd}>
                         <div className="board-div">
-                            <h3>{selectedBoard.name}</h3>
+                            <h3 className="board-name">{selectedBoard.name}</h3>
                             <div className="all-list-container">
                                 {lists && lists.map((list, index) => (
                                     <Droppable key={list.id} droppableId={list.id.toString()}>
