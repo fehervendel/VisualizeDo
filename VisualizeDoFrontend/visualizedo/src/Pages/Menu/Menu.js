@@ -5,6 +5,7 @@ import { json, useNavigate } from "react-router-dom";
 import "./Menu.css";
 import API_URL from "../config";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import Modal from "../../Components/Modal";
 
 
 function Menu() {
@@ -13,6 +14,8 @@ function Menu() {
     const [boards, setBoards] = useState(null);
     const [lists, setLists] = useState(null);
     const [selectedBoard, setSelectedBoard] = useState(null);
+    const [modal, setModal] = useState(false);
+    const [listId, setListId] = useState(null);
     //console.log(selectedBoard);
 
     const fetchBoard = async () => {
@@ -121,6 +124,10 @@ function Menu() {
         changeCardListById(cardId, listId);
     }
 
+    const toggleModal = () => {
+        setModal(!modal);
+    }
+
     return (
         <div className="main-div">
             <select className='selectBar' onChange={(e) => handleBoardChange(e)}>
@@ -144,7 +151,7 @@ function Menu() {
                                             <div className="list-container" ref={provided.innerRef} {...provided.droppableProps}>
                                                 <div className="list-head">
                                                     <h4>{list.name}</h4>
-                                                    <button className="add-button">Add card</button>
+                                                    <button className="add-button" onClick={() => {toggleModal(); setListId(list.id);}}>Add card</button>
                                                 </div>
                                                 {list.cards.map((card, index) => (
                                                     <Draggable key={card.id} draggableId={card.id.toString()} index={index}>
@@ -168,7 +175,10 @@ function Menu() {
                     </DragDropContext>
                 )
             )}
-
+            {modal && (<Modal
+                toggleModal={toggleModal}
+                listId={listId}
+                />)}
         </div>
     );
 }
