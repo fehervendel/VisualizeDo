@@ -5,7 +5,7 @@
     margin-right: 20px;
     margin-left: 20px;
     width: 18vw;
-    background-color: rgb(180, 180, 180);
+    background-color: rgba(0, 0, 0, 0.418);
     flex: 0 0 auto;
     position: relative;
     border: 2px solid black;
@@ -19,6 +19,7 @@
     position: relative;
     align-self: center;
     width: 100px;
+    color: aliceblue;
   }
   
   .cards-container {
@@ -28,11 +29,18 @@
   
   .card {
     margin-bottom: 10px;
-    border: 1px solid #ffffff;
+    border: 1px solid #000000;
     border-radius: 10px;
     margin: 10px;
     padding: 10px;
-    background-color:azure;
+    background-color:rgb(53, 53, 53);
+    transition: transform 0.3s ease;
+    color: aliceblue;
+  }
+
+  .card:hover {
+    background-color:rgba(75, 75, 75, 0.836);
+    transform: scale(1.05);
   }
 
   .all-list-container {
@@ -42,7 +50,9 @@
     border: 2px solid black;
     padding-top: 10px;
     padding-bottom: 5px;
-    background-color: rgb(0, 17, 255);
+    background: linear-gradient(13deg, rgba(229,33,246,0.85) 18%, rgba(0,168,255,0.8547794117647058) 61%, rgba(0,255,239,0.8547794117647058) 100%);
+    border-radius: 10px;
+    margin-left: 4vw;
   }
 
   .div-container {
@@ -62,4 +72,36 @@
   margin: 10px;
   padding: 0.5rem 1rem;
   border-radius: 15px;
+  background-color:rgb(53, 53, 53);
+  color: aliceblue;
+  font-weight: 600;
+}
+
+.Button {
+  background-color: rgba(229,33,246);
+  margin: 5px;
+}
+
+.Button:hover {
+  background-color: rgba(0,168,255);
+}
+
+.main-div {
+  background-color: rgb(240, 240, 240);
+  height: 94vh;
+}
+
+.selectBar {
+  margin: 10px;
+  height: 4vh;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: rgb(53, 53, 53);
+  color: aliceblue;
+}
+
+.board-name {
+  font-weight: 800;
+  font-size: 25px;
+  margin-left: 20px;
 }
