@@ -1,10 +1,7 @@
 .logoutButton {
     display: flex;
-    background-color: rgb(53, 53, 53);
-    color: aliceblue;
+    color: black;
     font-weight:800;
-    border-bottom-left-radius: 8px;
-    border-top-left-radius: 8px;
     height: 100%;
     align-items: center;
     justify-content: center;
@@ -15,8 +12,7 @@
 
   .button {
     display: flex;
-    background-color: rgb(53, 53, 53);
-    color: aliceblue;
+    color: black;
     font-weight:800;
     height: 100%;
     align-items: center;
@@ -24,24 +20,17 @@
     width: 6vw;
     font-size: 18px;
     min-width: 80px;
-    border-bottom-right-radius: 8px;
-    border-top-right-radius: 8px;
   }
   
-  #boardButton {
-    border-bottom-left-radius: 8px;
-    border-top-left-radius: 8px;
-    margin-left: 10px;
-  }
 
   .button:hover {
-    background-color: rgb(0, 255, 255);
-    color: black;
+    color: rgb(0, 255, 255);
+    cursor: pointer;
   }
   
   .logoutButton:hover {
-    background-color: rgb(216, 0, 245);
-    color: black;
+    color: rgb(216, 0, 245);
+    cursor: pointer;
   }
 
   .menuBar {
