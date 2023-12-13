@@ -16,6 +16,7 @@ function Menu() {
     const [selectedBoard, setSelectedBoard] = useState(null);
     const [modal, setModal] = useState(false);
     const [listId, setListId] = useState(null);
+    const [boardId, setBoardId] = useState(null);
     //console.log(selectedBoard);
 
     const fetchBoard = async () => {
@@ -91,6 +92,7 @@ function Menu() {
 
     const handleBoardChange = (e) => {
         const boardId = e.target.value;
+        setBoardId(boardId);
         //console.log(e.target.value);
         const selected = boards.find((board) => board.id == boardId);
         setSelectedBoard(selected);
@@ -184,6 +186,8 @@ function Menu() {
             {modal && (<Modal
                 toggleModal={toggleModal}
                 listId={listId}
+                boardId={boardId}
+                fetchListByBoardId={fetchListByBoardId}
             />)}
         </div>
     );
