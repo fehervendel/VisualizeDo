@@ -16,7 +16,6 @@ function LoginMenu() {
     const [saveEmail, setSaveEmail] = useState("");
     const [savePassword, setSavePassword] = useState("");
     const [userNameWarning, setUserNameWarning] = useState("");
-    //const token = Cookies.get("userToken");
     const [emailWarning, setEmailWarning] = useState("");
     const [passwordWarning, setPassowrdWarning] = useState("");
     const [registrationSuccess, setRegistrationSuccess] = useState(false);
