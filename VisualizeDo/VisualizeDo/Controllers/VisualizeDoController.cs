@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VisualizeDo.Context;
 using VisualizeDo.Models;
+using VisualizeDo.Models.DTOs;
 using VisualizeDo.Repositories;
 
 namespace VisualizeDo.Controllers;
@@ -201,22 +202,22 @@ public class VisualizeDoController : ControllerBase
     }
     
     [HttpPost("AddCard")]
-    public async Task<IActionResult> AddCard(int listId, string title, string description, string priority, string size)
+    public async Task<IActionResult> AddCard([FromBody] AddCard card)
     {
         try
         {
-            var list = await _listRepository.GetById(listId);
+            var list = await _listRepository.GetById(card.ListId);
             if (list == null)
             {
                 return NotFound("Board not found");
             }
             Card cardToAdd = new Card
             {
-                Title = title,
-                Description = description,
-                Priority = priority,
-                Size = size,
-                ListId = listId,
+                Title = card.Title,
+                Description = card.Description,
+                Priority = card.Priority,
+                Size = card.Size,
+                ListId = card.ListId,
                 List = list
             };
             
