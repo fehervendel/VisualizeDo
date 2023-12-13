@@ -115,10 +115,8 @@ function Menu() {
         originalColumn.cards = updatedSourceColumn;
 
         let updatedDestinationColumn = tempLists.find((list) => list.id == listId); // This is the destination column
-        //updatedDestinationColumn.cards.push(movedCard); // Here we just add the card to the destination column
-        updatedDestinationColumn.cards.splice(destination.index, 0, movedCard);
+        updatedDestinationColumn.cards.splice(destination.index, 0, movedCard); // Here we just add the card to the destination column with the correct index
 
-        //console.log("new board:", tempLists);
         setLists(tempLists);
         //card swap logic end
 
@@ -147,29 +145,36 @@ function Menu() {
                             <h3 className="board-name">{selectedBoard.name}</h3>
                             <div className="all-list-container">
                                 {lists && lists.map((list, index) => (
-                                    <Droppable key={list.id} droppableId={list.id.toString()}>
-                                        {(provided) => (
-                                            <div className="list-container" ref={provided.innerRef} {...provided.droppableProps}>
-                                                <div className="list-head">
-                                                    <h4>{list.name}</h4>
-                                                    <button className="add-button" onClick={() => {toggleModal(); setListId(list.id);}}>Add card</button>
+                                    <div className="list-container" key={list.id}>
+                                        <div className="list-head">
+                                            <h4>{list.name}</h4>
+                                            <button className="add-button" onClick={() => { toggleModal(); setListId(list.id); }}>Add card</button>
+                                        </div>
+                                        <Droppable droppableId={list.id.toString()}>
+                                            {(provided) => (
+                                                <div ref={provided.innerRef} {...provided.droppableProps} className="cards-container">
+                                                    {list.cards.map((card, index) => (
+                                                        <Draggable key={card.id} draggableId={card.id.toString()} index={index}>
+                                                            {(provided) => (
+                                                                <div
+                                                                    {...provided.draggableProps}
+                                                                    {...provided.dragHandleProps}
+                                                                    ref={provided.innerRef}
+                                                                    className="card"
+                                                                >
+                                                                    <div>Title: {card.title}</div>
+                                                                    <div>Description: {card.description}</div>
+                                                                    <div>Priority: {card.priority}</div>
+                                                                    <div>Size: {card.size}</div>
+                                                                </div>
+                                                            )}
+                                                        </Draggable>
+                                                    ))}
+                                                    {provided.placeholder}
                                                 </div>
-                                                {list.cards.map((card, index) => (
-                                                    <Draggable key={card.id} draggableId={card.id.toString()} index={index}>
-                                                        {(provided) => (
-                                                            <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} className="card">
-                                                                <div>Title: {card.title}</div>
-                                                                <div>Description: {card.description}</div>
-                                                                <div>Priority: {card.priority}</div>
-                                                                <div>Size: {card.size}</div>
-                                                            </div>
-                                                        )}
-                                                    </Draggable>
-                                                ))}
-                                                {provided.placeholder}
-                                            </div>
-                                        )}
-                                    </Droppable>
+                                            )}
+                                        </Droppable>
+                                    </div>
                                 ))}
                             </div>
                         </div>
@@ -179,7 +184,7 @@ function Menu() {
             {modal && (<Modal
                 toggleModal={toggleModal}
                 listId={listId}
-                />)}
+            />)}
         </div>
     );
 }
