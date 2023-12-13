@@ -20,7 +20,6 @@
     align-self: center;
     width: 100px;
     color: aliceblue;
-    /* overflow-x: hidden; */
   }
   
   .cards-container {
@@ -54,6 +53,7 @@
     margin-left: 4vw;
     }
 
+
   .div-container {
     max-height: 50vh;
     min-height: 50vh;
@@ -80,6 +80,7 @@
 .add-button:hover {
   background-color:rgba(75, 75, 75, 0.836);
   transform: scale(1.08);
+  cursor: pointer;
 }
 
 .Button {
