@@ -41,6 +41,7 @@
   
   .logoutButton:hover {
     background-color: rgb(216, 0, 245);
+    color: black;
   }
 
   .menuBar {
