@@ -1,8 +1,8 @@
 import { useLocation } from 'react-router-dom';
-import LoginMenu from '../Pages/LoginMenu/LoginMenu';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import './Layout.css';
 
 const Layout = () => {
     const location = useLocation();
@@ -16,9 +16,16 @@ const Layout = () => {
         navigate("/");
     }
 
-    return(<div>{location.pathname === '/' ? (null) : (<div>
-        Menu bar!
-        <button onClick={(e) => handleLogout(e)}>Logout</button>
+    return (<div>{location.pathname === '/' ? (null) : (<div className='menuBar'>
+        <div className='menuItems'>
+            <a className='button'>Create</a>
+        </div>
+        <div className='menuItems'>
+            <a className='button' id='boardButton'>Boards</a>
+        </div>
+        <div className='menuItems' id='logoutButton'>
+            <a className='logoutButton' onClick={(e) => handleLogout(e)}>Logout</a>
+        </div>
     </div>)}</div>);
 }
 
