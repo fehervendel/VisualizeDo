@@ -18,13 +18,13 @@ const Layout = () => {
 
     return (<div>{location.pathname === '/' ? (null) : (<div className='menuBar'>
         <div className='menuItems'>
-            <button className='button'>Create</button>
+            <a className='button'>Create</a>
         </div>
         <div className='menuItems'>
-            <button className='button' id='boardButton'>Boards</button>
+            <a className='button' id='boardButton'>Boards</a>
         </div>
         <div className='menuItems' id='logoutButton'>
-            <button className='logoutButton' onClick={(e) => handleLogout(e)}>Logout</button>
+            <a className='logoutButton' onClick={(e) => handleLogout(e)}>Logout</a>
         </div>
     </div>)}</div>);
 }
