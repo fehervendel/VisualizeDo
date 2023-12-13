@@ -115,9 +115,10 @@ function Menu() {
         originalColumn.cards = updatedSourceColumn;
 
         let updatedDestinationColumn = tempLists.find((list) => list.id == listId); // This is the destination column
-        updatedDestinationColumn.cards.push(movedCard); // Here we just add the card to the destination column
+        //updatedDestinationColumn.cards.push(movedCard); // Here we just add the card to the destination column
+        updatedDestinationColumn.cards.splice(destination.index, 0, movedCard);
 
-        console.log("new board:", tempLists);
+        //console.log("new board:", tempLists);
         setLists(tempLists);
         //card swap logic end
 
