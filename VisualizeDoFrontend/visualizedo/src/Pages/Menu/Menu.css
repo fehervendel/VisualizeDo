@@ -112,10 +112,8 @@
 }
 
 .main-div {
-  background-color: rgb(240, 240, 240);
+  background-color: rgba(240, 240, 240, 0);
   height: 94vh;
-  background-image: url('../../images/vd-backdound.png');
-  background-size: cover;
 }
 
 .selectBar {

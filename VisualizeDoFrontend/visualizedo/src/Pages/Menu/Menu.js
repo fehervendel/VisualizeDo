@@ -117,7 +117,7 @@ function Menu() {
         let originalColumn = tempLists.find((list) => list.cards.find((card) => card.id == cardId)); // This is the column where we took a card from
         let movedCard = originalColumn.cards.find((card) => card.id == cardId); // This is the card we moved
         let updatedSourceColumn = originalColumn.cards.filter((card) => card.id != cardId); // These are the remaining cards of the column where we took a card from
-        originalColumn.cards = updatedSourceColumn;
+        originalColumn.cards = updatedSourceColumn; // Changing the original column to the updated one
 
         let updatedDestinationColumn = tempLists.find((list) => list.id == listId); // This is the destination column
         updatedDestinationColumn.cards.splice(destination.index, 0, movedCard); // Here we just add the card to the destination column with the correct index

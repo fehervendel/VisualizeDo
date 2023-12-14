@@ -18,4 +18,6 @@ code {
 
 :root {
   --xl: "550px";
+  background-image: url('./images/vd-backdound.png');
+  background-size: cover;
 }
