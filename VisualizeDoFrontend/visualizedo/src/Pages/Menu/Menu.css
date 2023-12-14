@@ -28,6 +28,7 @@
   }
   
   .card {
+    position: relative;
     margin-bottom: 10px;
     border: 1px solid #000000;
     border-radius: 10px;
@@ -39,6 +40,24 @@
 
   .card:hover {
     background-color:rgba(75, 75, 75, 0.836);
+  }
+
+  .options-button {
+    position: absolute;
+    right: 2%;
+    top: 10%;
+    border-radius: 10px;
+    padding-bottom: 8px;
+    width: 4vh;
+    font-weight: 900;
+    background-color:rgb(53, 53, 53);
+    border: none;
+    color: white;
+  }
+
+  .options-button:hover {
+    cursor: pointer;
+    background-color:rgba(114, 114, 114, 0.836);
   }
 
   .all-list-container {
@@ -151,4 +170,35 @@
   left: 0;
   transform: translate(50%, -100%);
 
+}
+
+.delete-button {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  transform: translate(-25%, -100%);
+}
+
+.confirmation-modal {
+  width: 15%;
+  height: 15%;
+  background-color: rgb(228, 228, 228);
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  border-radius: 10px;
+  flex-direction: column;
+}
+
+.confirmation-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 200;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
