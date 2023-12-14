@@ -59,8 +59,8 @@ function EditModal(props) {
     <div className="confirmation-modal">
         <h2>Are you sure?</h2>
         <div>
-        <button onClick={deleteCardById}>Yes</button>
-        <button onClick={(e) => {e.preventDefault(); setConfirmationModal(false)}}>No</button>
+        <button onClick={deleteCardById}>Delete</button>
+        <button onClick={(e) => {e.preventDefault(); setConfirmationModal(false)}}>Cancel</button>
         </div>
         </div>
         </div>)}
