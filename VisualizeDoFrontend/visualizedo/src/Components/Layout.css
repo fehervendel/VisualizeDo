@@ -36,7 +36,7 @@
   .menuBar {
     display: flex;
     align-items: center;
-    background: linear-gradient(120deg, rgba(229,33,246,0.85) 18%, rgba(0,168,255,0.8547794117647058) 61%, rgba(0,255,239,0.8547794117647058) 100%);
+    background: linear-gradient(120deg, rgba(229,33,246,1) 18%, rgba(0,168,255,1) 61%, rgba(0,255,239,1) 100%);
     height: 6vh;
     border-bottom: 2px solid black;
   }

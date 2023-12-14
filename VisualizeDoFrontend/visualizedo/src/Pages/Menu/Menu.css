@@ -67,7 +67,7 @@
     border: 2px solid black;
     padding-top: 10px;
     padding-bottom: 5px;
-    background: linear-gradient(13deg, rgba(229,33,246,0.85) 18%, rgba(0,168,255,0.8547794117647058) 61%, rgba(0,255,239,0.8547794117647058) 100%);
+    background: linear-gradient(13deg, rgba(229,33,246,0.6) 18%, rgba(0,168,255,0.6) 61%, rgba(0,255,239,0.6) 100%);
     border-radius: 10px;
     margin-left: 4vw;
     }
@@ -114,6 +114,8 @@
 .main-div {
   background-color: rgb(240, 240, 240);
   height: 94vh;
+  background-image: url('../../images/vd-backdound.png');
+  background-size: cover;
 }
 
 .selectBar {
@@ -129,6 +131,7 @@
   font-weight: 800;
   font-size: 25px;
   margin-left: 20px;
+  color: azure;
 }
 
 .modal-overlay {
