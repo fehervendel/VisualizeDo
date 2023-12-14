@@ -5,7 +5,8 @@ import { json, useNavigate } from "react-router-dom";
 import "./Menu.css";
 import API_URL from "../config";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import Modal from "../../Components/Modal";
+import AddModal from "../../Components/AddModal";
+import EditModal from "../../Components/EditModal";
 
 
 function Menu() {
@@ -14,9 +15,11 @@ function Menu() {
     const [boards, setBoards] = useState(null);
     const [lists, setLists] = useState(null);
     const [selectedBoard, setSelectedBoard] = useState(null);
-    const [modal, setModal] = useState(false);
+    const [addModal, setAddModal] = useState(false);
+    const [editModal, setEditModal] = useState(false);
     const [listId, setListId] = useState(null);
     const [boardId, setBoardId] = useState(null);
+    const [card, setCard] = useState(null);
     //console.log(selectedBoard);
 
     const fetchBoard = async () => {
@@ -125,8 +128,12 @@ function Menu() {
         changeCardListById(cardId, listId);
     }
 
-    const toggleModal = () => {
-        setModal(!modal);
+    const toggleAddModal = () => {
+        setAddModal(!addModal);
+    }
+
+    const toggleEditModal = () => {
+        setEditModal(!editModal);
     }
 
     return (
@@ -150,7 +157,7 @@ function Menu() {
                                     <div className="list-container" key={list.id}>
                                         <div className="list-head">
                                             <h4>{list.name}</h4>
-                                            <button className="add-button" onClick={() => { toggleModal(); setListId(list.id); }}>Add card</button>
+                                            <button className="add-button" onClick={() => { toggleAddModal(); setListId(list.id); }}>Add card</button>
                                         </div>
                                         <Droppable droppableId={list.id.toString()}>
                                             {(provided) => (
@@ -165,6 +172,7 @@ function Menu() {
                                                                     className="card"
                                                                 >
                                                                     <div>Title: {card.title}</div>
+                                                                    <button className="options-button" onClick={() => {toggleEditModal(); setCard(card)}}>...</button>
                                                                     <div>Description: {card.description}</div>
                                                                     <div>Priority: {card.priority}</div>
                                                                     <div>Size: {card.size}</div>
@@ -183,11 +191,17 @@ function Menu() {
                     </DragDropContext>
                 )
             )}
-            {modal && (<Modal
-                toggleModal={toggleModal}
+            {addModal && (<AddModal
+                toggleAddModal={toggleAddModal}
                 listId={listId}
                 boardId={boardId}
                 fetchListByBoardId={fetchListByBoardId}
+            />)}
+            {editModal && (<EditModal
+            toggleEditModal={toggleEditModal}
+            card={card}
+            fetchListByBoardId={fetchListByBoardId}
+            boardId={boardId}
             />)}
         </div>
     );
