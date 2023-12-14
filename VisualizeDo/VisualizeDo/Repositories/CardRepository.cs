@@ -51,6 +51,9 @@ public class CardRepository : ICardRepository
         {
             dbContext.Remove(cardToDelete);
             await dbContext.SaveChangesAsync();
+        } else
+        {
+            throw new ArgumentException("Card or not found for provided Id");
         }
     }
 
