@@ -45,7 +45,8 @@
   .options-button {
     position: absolute;
     right: 2%;
-    top: 10%;
+    top: 3%;
+    right: 1%;
     border-radius: 10px;
     padding-bottom: 8px;
     width: 4vh;
@@ -151,8 +152,8 @@
   padding: 20px;
   border-radius: 8px;
   z-index: 101;
-  height: 60vh;
-  width: 60vw;
+  height: 50vh;
+  width: 50vw;
 }
 
 .modal-content {
@@ -163,6 +164,9 @@
   position: absolute;
   top: 0;
   right: 0;
+  padding: 10px;
+  margin-right: 15px;
+  cursor: pointer;
 }
 
 .save-button {
@@ -170,7 +174,9 @@
   bottom: 0;
   left: 0;
   transform: translate(50%, -100%);
-
+  padding: 10px;
+  margin-bottom: -15px;
+  cursor: pointer;
 }
 
 .delete-button {
@@ -202,4 +208,59 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.title-input {
+  background-color: rgb(218, 218, 218);
+  border-radius: 5px;
+  height: 4vh;
+  padding: 5px;
+  font-size: 20px;
+}
+
+.description-input {
+  background-color: rgb(218, 218, 218);
+  border-radius: 5px;
+  height: 15vh;
+  width: 30vw;
+  text-align: left;
+  box-sizing: border-box;
+  line-height: normal;
+  resize: none;
+  font-size: 20px;
+  padding: 10px;
+  border: 1px solid black;
+}
+
+.dropdown-inputs {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  float: right;
+  margin-top: -5vh;
+  margin-right: 3vw;
+}
+
+.priority-input {
+  border-radius: 5px;
+  width: 7vw;
+  background-color: rgb(218, 218, 218);
+  height: 3vh;
+  font-size: 15px;
+  min-width: 130px;
+}
+
+.size-input {
+  border-radius: 5px;
+  width: 7vw;
+  background-color: rgb(218, 218, 218);
+  height: 3vh;
+  font-size: 15px;
+  min-width: 130px;
+}
+
+.save-warning {
+  color: red;
+  position: relative;
+  margin-left: 5vw;
 }
