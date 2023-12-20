@@ -80,7 +80,7 @@ function Menu() {
 
     const changeCardListById = async (cardId, listId) => {
         try {
-            const response = await fetch(`https://localhost:7225/VisualizeDo/ChangeCardsListById?cardId=${cardId}&listId=${listId}`, {
+            const response = await fetch(`${API_URL}/VisualizeDo/ChangeCardsListById?cardId=${cardId}&listId=${listId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
