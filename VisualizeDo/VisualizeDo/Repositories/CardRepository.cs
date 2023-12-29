@@ -75,4 +75,25 @@ public class CardRepository : ICardRepository
             throw new ArgumentException("Card or List not found for provided Id");
         }
     }
+
+    public async Task EditCard(int id, string title, string description, string priority, string size)
+    {
+        using var dbContext = new VisualizeDoContext();
+
+        Card? cardToEdit = await dbContext.Cards.FirstOrDefaultAsync(c => c.Id == id);
+
+        if (cardToEdit != null)
+        {
+            cardToEdit.Title = title;
+            cardToEdit.Description = description;
+            cardToEdit.Priority = priority;
+            cardToEdit.Size = size;
+            dbContext.Update(cardToEdit);
+            await dbContext.SaveChangesAsync();
+        }
+        else
+        {
+            throw new ArgumentException("Edit failed on card with the provided Id");
+        }
+    }
 }
