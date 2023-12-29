@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import '../Pages/Menu/Menu.css';
 import API_URL from "../Pages/config";
 
