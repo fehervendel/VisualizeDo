@@ -10,4 +10,5 @@ public interface ICardRepository
     Task Update(Card card);
     Task DeleteById(int id);
     Task ChangeList(int cardId, int listId);
+    Task EditCard(int id, string title, string description, string priority, string size);
 }
