@@ -276,4 +276,20 @@ public class VisualizeDoController : ControllerBase
             return StatusCode(500, "Internal server Error");
         }
     }
+
+    [HttpPut("EditCard")]//, Authorize(Roles = "Admin")
+    public async Task<IActionResult> EditCard([FromBody] EditCard editCard)
+    {
+        try
+        {
+            await _cardRepository.EditCard(editCard.Id, editCard.Title, editCard.Description, editCard.Priority,
+                editCard.Size);
+            return Ok("Card has been successfully updated!");
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error editing card:(");
+            return StatusCode(500, "Internal server error");
+        }
+    }
 }
