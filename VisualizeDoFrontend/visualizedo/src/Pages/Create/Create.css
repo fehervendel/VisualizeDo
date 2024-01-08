@@ -1,0 +1,55 @@
+.create-container {
+    padding-top: 4vh;
+    display: flex;
+    height: 90vh;
+}
+
+.create-inputs {
+    background-color: rgba(0, 0, 0, 0.7);
+    height: 100%;
+    width: 30vw;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    position: relative;
+}
+
+.create-space {
+    width: 10vw;
+}
+
+.create-preview {
+    width: 55vw;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 20px;
+}
+
+.create-button {
+    border-radius: 10px;
+    padding: 15px;
+    font-weight: 800;
+    font-size: 30px;
+    margin-top: 30px;
+    margin-left: 30px;
+    cursor: pointer;
+    background-color: rgb(229,33,246);
+    transition: 0.2s;
+}
+
+.create-button:hover {
+    background-color: rgb(0, 255, 242);
+    transform: scale(1.1);
+}
+
+.inputs {
+    margin-left: 20px;
+}
+
+.instruction {
+    color: aliceblue;
+}
+
+.save {
+    position: absolute;
+    bottom: 2vh;
+    right: 1vw;
+}
