@@ -7,6 +7,8 @@ import API_URL from "../config";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import AddModal from "../../Components/AddModal";
 import EditModal from "../../Components/EditModal";
+import useModal from "../../Hooks/useModal";
+import Modal from "../../Components/Modal";
 
 
 function Menu() {
@@ -15,11 +17,10 @@ function Menu() {
     const [boards, setBoards] = useState(null);
     const [lists, setLists] = useState(null);
     const [selectedBoard, setSelectedBoard] = useState(null);
-    const [addModal, setAddModal] = useState(false);
-    const [editModal, setEditModal] = useState(false);
     const [listId, setListId] = useState(null);
     const [boardId, setBoardId] = useState(null);
     const [card, setCard] = useState(null);
+    const { toggleModal: toggleEditModal, show: showEditModal } = useModal();
     //console.log(selectedBoard);
 
     const fetchBoard = async () => {
@@ -128,13 +129,6 @@ function Menu() {
         changeCardListById(cardId, listId);
     }
 
-    const toggleAddModal = () => {
-        setAddModal(!addModal);
-    }
-
-    const toggleEditModal = () => {
-        setEditModal(!editModal);
-    }
 
     return (
         <div className="main-div">
@@ -157,7 +151,15 @@ function Menu() {
                                     <div className="list-container" key={list.id}>
                                         <div className="list-head">
                                             <h4>{list.name}</h4>
-                                            <button className="add-button" onClick={() => { toggleAddModal(); setListId(list.id); }}>Add card</button>
+                                            <Modal
+                                                setListId={() => setListId(list.id)}
+                                            >
+                                                <AddModal
+                                                    listId={listId}
+                                                    boardId={boardId}
+                                                    fetchListByBoardId={fetchListByBoardId}
+                                                />
+                                            </Modal>
                                         </div>
                                         <Droppable droppableId={list.id.toString()}>
                                             {(provided) => (
@@ -172,7 +174,7 @@ function Menu() {
                                                                     className="card"
                                                                 >
                                                                     <div>Title: {card.title}</div>
-                                                                    <button className="options-button" onClick={() => {toggleEditModal(); setCard(card)}}>...</button>
+                                                                    <button className="options-button" onClick={() => { toggleEditModal(); setCard(card) }}>...</button>
                                                                     <div>Description: {card.description}</div>
                                                                     <div>Priority: {card.priority}</div>
                                                                     <div>Size: {card.size}</div>
@@ -191,17 +193,11 @@ function Menu() {
                     </DragDropContext>
                 )
             )}
-            {addModal && (<AddModal
-                toggleAddModal={toggleAddModal}
-                listId={listId}
-                boardId={boardId}
+            {showEditModal && (<EditModal
+                toggleEditModal={toggleEditModal}
+                card={card}
                 fetchListByBoardId={fetchListByBoardId}
-            />)}
-            {editModal && (<EditModal
-            toggleEditModal={toggleEditModal}
-            card={card}
-            fetchListByBoardId={fetchListByBoardId}
-            boardId={boardId}
+                boardId={boardId}
             />)}
         </div>
     );
