@@ -3,18 +3,11 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import './Layout.css';
+import useLogout from '../Hooks/useLogout';
 
 const Layout = () => {
-    const location = useLocation();
-    const [token, setToken] = useState(Cookies.get("userToken"));
-    const navigate = useNavigate();
-
-    const handleLogout = (e) => {
-        e.preventDefault();
-        Cookies.remove("userToken");
-        setToken(null);
-        navigate("/");
-    }
+   const {location,
+    handleLogout} = useLogout();
 
     return (<div>{location.pathname === '/' ? (null) : (<div className='menuBar'>
         <div className='menuItems'>
