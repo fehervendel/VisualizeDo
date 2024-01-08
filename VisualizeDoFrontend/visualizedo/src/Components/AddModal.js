@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import '../Pages/Menu/Menu.css';
+import '../Pages/Boards/Boards.css';
 import API_URL from "../Pages/config";
 
 

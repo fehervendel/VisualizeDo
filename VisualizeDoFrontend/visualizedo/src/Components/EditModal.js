@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import API_URL from "../Pages/config";
-import '../Pages/Menu/Menu.css';
+import '../Pages/Boards/Boards.css';
 
 function EditModal(props) {
     const priorities = ["Urgent", "High", "Medium", "Low"];
