@@ -72,11 +72,11 @@ public class VisualizeDoController : ControllerBase
     }
 
     [HttpPost("AddBoard")]
-    public async Task<IActionResult> AddBoard(int userId, string name)
+    public async Task<IActionResult> AddBoard(string email, string name)
     {
         try
         {
-            var user = await _userRepository.GetById(userId);
+            var user = await _userRepository.GetByEmail(email);
             if (user == null)
             {
                 return NotFound("User not found");
@@ -84,7 +84,7 @@ public class VisualizeDoController : ControllerBase
             Board boardToAdd = new Board
             {
                 Name = name,
-                UserId = userId,
+                UserId = user.Id,
                 User = user
             };
             
