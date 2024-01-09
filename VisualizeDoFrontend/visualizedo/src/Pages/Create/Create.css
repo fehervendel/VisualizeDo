@@ -48,8 +48,91 @@
     color: aliceblue;
 }
 
-.save {
+.cancel {
     position: absolute;
     bottom: 2vh;
     right: 1vw;
+    border-radius: 5px;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: 600;
+    background-color: rgb(229,33,246);
+    cursor: pointer;
+    transition: 0.2s;
+
+}
+
+.save {
+    position: absolute;
+    bottom: 2vh;
+    left: 1vw;
+    border-radius: 5px;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: 600;
+    background-color: rgb(0, 255, 242);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.save:hover{
+    scale: 1.1;
+    background-color: rgb(0, 255, 64);
+}
+
+.cancel:hover{
+    scale: 1.1;
+    background-color: red;
+}
+
+.input{
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 15px;
+}
+
+.note {
+    color: aliceblue;
+    margin-right: 10px;
+    padding-right: 10px;
+}
+
+.select {
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.back {
+    position: absolute;
+    bottom: 2vh;
+    left: 1vw;
+    border-radius: 5px;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: 600;
+    background-color: rgb(0, 255, 242);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.next {
+    position: absolute;
+    bottom: 2vh;
+    left: 6.5vw;
+    border-radius: 5px;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: 600;
+    background-color: rgb(0, 255, 242);
+    cursor: pointer;
+    transition: 0.2s;
+    margin-left: 15px;
+}
+
+.back:hover {
+    scale: 1.1;
+}
+
+.next:hover {
+    scale: 1.1;
 }
