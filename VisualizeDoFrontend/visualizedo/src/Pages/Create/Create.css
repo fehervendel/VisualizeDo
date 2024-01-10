@@ -31,7 +31,7 @@
     margin-top: 30px;
     margin-left: 30px;
     cursor: pointer;
-    background-color: rgb(229,33,246);
+    background-color: rgb(229, 33, 246);
     transition: 0.2s;
 }
 
@@ -56,7 +56,7 @@
     padding: 15px;
     font-size: 18px;
     font-weight: 600;
-    background-color: rgb(229,33,246);
+    background-color: rgb(229, 33, 246);
     cursor: pointer;
     transition: 0.2s;
 
@@ -75,17 +75,17 @@
     transition: 0.2s;
 }
 
-.save:hover{
+.save:hover {
     scale: 1.1;
     background-color: rgb(0, 255, 64);
 }
 
-.cancel:hover{
+.cancel:hover {
     scale: 1.1;
     background-color: red;
 }
 
-.input{
+.input {
     border-radius: 8px;
     padding: 10px;
     font-size: 15px;
@@ -136,3 +136,65 @@
 .next:hover {
     scale: 1.1;
 }
+
+#save {
+    background-color: #1eff00;
+}
+
+.preview-all-list-container {
+    overflow-x: auto;
+    width: 51vw;
+    display: flex;
+    border: 2px solid black;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    background: linear-gradient(13deg, rgba(229, 33, 246, 0.6) 18%, rgba(0, 168, 255, 0.6) 61%, rgba(0, 255, 239, 0.6) 100%);
+    border-radius: 10px;
+    margin-left: 2vw;
+    height: 75%;
+    position: absolute;
+    bottom: 7vh;
+}
+
+.preview-list-container {
+    display: inline-flex;
+    flex-direction: column;
+    vertical-align: top;
+    margin-right: 20px;
+    margin-left: 20px;
+    width: 13.5vw;
+    background-color: rgba(0, 0, 0, 0.418);
+    flex: 0 0 auto;
+    position: relative;
+    border: 2px solid black;
+    border-radius: 10px;
+    height: 98%;
+}
+
+.preview-list-head {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .preview-cards-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .preview-card {
+    position: relative;
+    margin-bottom: 10px;
+    border: 1px solid #000000;
+    border-radius: 10px;
+    margin: 10px;
+    padding: 10px;
+    background-color:rgb(53, 53, 53);
+    color: aliceblue;
+  }
+
+  .card-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    overflow-wrap: break-word;
+  }
