@@ -58,4 +58,23 @@ public class ListRepository : IListRepository
             await dbContext.SaveChangesAsync();
         }
     }
+
+    public async Task AddLists(List<List> lists)
+    {
+        using var dbContext = new VisualizeDoContext();
+        var board = await dbContext.Boards.FindAsync(lists[0].BoardId);
+        if (board != null)
+        {
+            foreach (var list in lists)
+            {
+                list.Board = board;
+                dbContext.Lists.Add(list);
+            }
+            await dbContext.SaveChangesAsync();
+        }
+        else
+        {
+            throw new ArgumentException("Board not found for the provided Board Id");
+        }
+    }
 }
