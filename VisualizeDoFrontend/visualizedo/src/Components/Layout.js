@@ -11,11 +11,11 @@ const Layout = () => {
     handleLogout} = useLogout();
 
     const handleCreateClick = () => {
-        navigate('/create');
+        navigate('/Create');
     }
 
     const handleBoardsClick = () => {
-        navigate('/Menu');
+        navigate('/Boards');
     }
 
 
