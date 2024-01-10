@@ -144,6 +144,9 @@ function Menu() {
                     <DragDropContext onDragEnd={handleDragEnd}>
                         <div className="board-div">
                             <h3 className="board-name">{selectedBoard.name}</h3>
+                            <button className="add-list-button">
+                                Add List +
+                            </button>
                             <div className="all-list-container">
                                 {lists && lists.map((list, index) => (
                                     <div className="list-container" key={list.id}>
