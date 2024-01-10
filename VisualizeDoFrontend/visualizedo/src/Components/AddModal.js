@@ -30,12 +30,12 @@ function AddModal(props) {
                     priority: priority,
                     size: size
                 }),
-            }).then((res) => res.json())
-                .then((data) => {
-                    console.log(data);
-                    props.fetchListByBoardId(props.boardId);
-                    props.toggleAddModal();
-                })
+            })
+            const data = response.json();
+            console.log(data);
+            props.fetchListByBoardId(props.boardId);
+            props.toggleAddModal();
+
         } catch (error) {
             console.error("Error:", error);
         }
@@ -44,28 +44,28 @@ function AddModal(props) {
     const handleSave = () => {
         let isAnyError = false;
         let warnings = [];
-        if(title === ""){
+        if (title === "") {
             warnings.push("title")
             isAnyError = true;
             setIsError(true);
         }
-        if(description === ""){
+        if (description === "") {
             warnings.push("description")
             isAnyError = true;
             setIsError(true);
         }
-        if(priority === ""){
+        if (priority === "") {
             warnings.push("priority")
             isAnyError = true;
             setIsError(true);
         }
-        if(size === ""){
+        if (size === "") {
             warnings.push("size")
             isAnyError = true;
             setIsError(true);
         }
         setWarnings(warnings);
-        if(!isAnyError){
+        if (!isAnyError) {
             addCard();
         }
     };
@@ -77,26 +77,26 @@ function AddModal(props) {
                 <h3>Title</h3>
                 <input className='title-input' onChange={(e) => setTitle(e.target.value)} type="text" placeholder="Add your card title..." />
                 <h3>Description</h3>
-                <textarea className='description-input' onChange={(e) => setDescription(e.target.value)} type="text" placeholder="Add your description here..."/>
+                <textarea className='description-input' onChange={(e) => setDescription(e.target.value)} type="text" placeholder="Add your description here..." />
                 <div className="dropdown-inputs">
-                <div>
-                <h3>Priority</h3>
-                <select className='priority-input' onChange={(e) => setPriority(e.target.value)}>
-                    <option disabled selected>Choose priority...</option>
-                    {priorities.map((p) => (
-                        <option key={p} value={p}>{p}</option>
-                    ))}
-                </select>
-                </div>
-                <div>
-                <h3>Size</h3>
-                <select className="size-input" onChange={(e) => setSize(e.target.value)}>
-                    <option disabled selected>Choose size...</option>
-                    {sizes.map((s) => (
-                        <option key={s} value={s}>{s}</option>
-                    ))}
-                </select>
-                </div>
+                    <div>
+                        <h3>Priority</h3>
+                        <select className='priority-input' onChange={(e) => setPriority(e.target.value)}>
+                            <option disabled selected>Choose priority...</option>
+                            {priorities.map((p) => (
+                                <option key={p} value={p}>{p}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div>
+                        <h3>Size</h3>
+                        <select className="size-input" onChange={(e) => setSize(e.target.value)}>
+                            <option disabled selected>Choose size...</option>
+                            {sizes.map((s) => (
+                                <option key={s} value={s}>{s}</option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
                 <button className="close-button" onClick={props.toggleAddModal}>Close</button>
             </div>
