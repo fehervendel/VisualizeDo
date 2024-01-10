@@ -263,3 +263,23 @@
   position: relative;
   margin-left: 5vw;
 }
+
+.add-list-button {
+  position: absolute;
+  right: 5vh;
+  font-weight: 800;
+  font-size: 20px;
+  padding: 10px;
+  height: 8vh;
+  width: 12vh;
+  top: 10vh;
+  border-radius: 15px;
+  background-color:rgb(53, 53, 53);
+  color: aliceblue;
+}
+
+.add-list-button:hover {
+  background-color:rgba(75, 75, 75, 0.836);
+  transform: scale(1.08);
+  cursor: pointer;
+}
