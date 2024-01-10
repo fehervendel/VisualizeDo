@@ -156,6 +156,42 @@ public class VisualizeDoController : ControllerBase
             return StatusCode(500, "Internal Server Error");
         }
     }
+    
+    [HttpPost("AddLists")]
+    public async Task<IActionResult> AddLists(int boardId, [FromBody] List<string> names)
+    {
+        try
+        {
+            var board = await _boardRepository.GetById(boardId);
+            if (boardId == null)
+            {
+                return NotFound("Board not found");
+            }
+
+            List<List> listsToAdd = new List<List>();
+            
+            foreach (string name in names)
+            {
+                List listToAdd = new List
+                            {
+                                Name = name,
+                                BoardId = boardId,
+                                Board = board
+                            };
+                listsToAdd.Add(listToAdd);
+            }
+            
+            await _listRepository.AddLists(listsToAdd);
+            
+            return Ok(listsToAdd);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error adding new lists :("); 
+            return StatusCode(500, "Internal Server Error");
+        }
+    }
+    
     [HttpGet("GetListById")]//, Authorize(Roles = "User, Admin")
     public async Task<IActionResult> GetListById(int id)
     {
