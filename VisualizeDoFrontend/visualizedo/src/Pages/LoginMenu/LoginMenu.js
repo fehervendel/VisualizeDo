@@ -8,6 +8,11 @@ import todoList from "../../images/todoList.png"
 import { useNavigate } from "react-router-dom";
 import todoList2 from "../../images/todoList.jpg";
 import todoList3 from "../../images/todoList3.png";
+import screenshot1 from "../../images/screenshot-1.PNG";
+import screenshot2 from "../../images/screenshot-2.PNG";
+import screenshot3 from "../../images/screenshot-3.PNG";
+import screenshot4 from "../../images/screenshot-4.PNG";
+import screenshot5 from "../../images/screenshot-5.PNG";
 import { useRef } from "react";
 
 function LoginMenu() {
@@ -22,7 +27,7 @@ function LoginMenu() {
     const [showPassword, setShowPassword] = useState(false);
     const warnings = [userNameWarning, emailWarning, passwordWarning];
     const navigate = useNavigate();
-    const images = [todoList, todoList2, todoList3];
+    const images = [screenshot1, screenshot2, screenshot3, screenshot4, screenshot5];
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const intervalRef = useRef(null);
 
@@ -64,7 +69,7 @@ function LoginMenu() {
               const tokenPayload = JSON.parse(atob(data.token.split('.')[1]));
               const userRole = tokenPayload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
               Cookies.set("userRole", userRole, { expires: 10 });
-              navigate("/Menu");
+              navigate("/Boards");
             } else {
                 if(data["Bad credentials"][0] === "Invalid email"){
                   setEmailWarning(data["Bad credentials"][0])
