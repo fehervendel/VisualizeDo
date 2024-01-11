@@ -225,10 +225,20 @@ public class VisualizeDoController : ControllerBase
     [HttpDelete("DeleteListById")]//, Authorize(Roles = "Admin")
     public async Task<IActionResult> DeleteListById(int id)
     {
+        
         try
         {
-            await _listRepository.DeleteById(id);
-            return Ok($"List with id: {id} has been deleted!");
+            List list = await _listRepository.GetById(id);
+            if (list != null)
+            {
+                await _listRepository.DeleteById(id);
+                return Ok($"List with id: {id} has been deleted!");
+            }
+            else
+            {
+                return NotFound("Error deleting list");
+            }
+            
         }
         catch (Exception e)
         {
