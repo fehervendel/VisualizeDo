@@ -7,6 +7,8 @@ import AddModal from "../../Components/AddModal";
 import EditModal from "../../Components/EditModal";
 import useModal from "../../Hooks/useModal";
 import Modal from "../../Components/Modal";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
 function Menu() {
@@ -19,6 +21,11 @@ function Menu() {
     const [boardId, setBoardId] = useState(null);
     const [card, setCard] = useState(null);
     const { toggleModal: toggleEditModal, show: showEditModal } = useModal();
+    const [addListClicked, setAddListClicked] = useState(false);
+    const [newListName, setNewListName] = useState("");
+    const [listNameWarning, setListNameWarning] = useState(false);
+    const [confirmationModal, setConfirmationModal] = useState(false);
+    const [deleteListId, setDeleteListId] = useState(null);
     //console.log(selectedBoard);
 
     const fetchBoard = async () => {
@@ -46,6 +53,38 @@ function Menu() {
         fetchBoard();
     }, [userEmail])
 
+    const addList = async () => {
+        try {
+            const response = await fetch(`${API_URL}/VisualizeDo/AddList?boardId=${boardId}&name=${newListName}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    //"Authorization": `Bearer ${token}`
+                },
+            })
+            const data = await response.json();
+            console.log(data);
+            setNewListName("");
+            await fetchListByBoardId(boardId);
+
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const handleDelete = async () => {
+        try {
+            const response = await fetch(`${API_URL}/VisualizeDo/DeleteListById?id=${deleteListId}`, {
+                method: "DELETE"
+            });
+            const data = await response.text();
+            await fetchListByBoardId(boardId);
+            toggleConfirmationModal();
+        }  catch (err) {
+            console.error(err.message);
+        }
+    }
+
     const fetchListByBoardId = async (id) => {
         try {
             const response = await fetch(`${API_URL}/VisualizeDo/GetListsByBoardId?id=${id}`, {
@@ -65,7 +104,6 @@ function Menu() {
         } catch (err) {
             console.error(err);
         }
-
     };
 
     const deepCopyLists = (lists) => {
@@ -127,6 +165,23 @@ function Menu() {
         changeCardListById(cardId, listId);
     }
 
+    const toggleAddList = () => {
+        setAddListClicked(!addListClicked);
+    }
+
+    const handleAddList = () => {
+        if (newListName.length < 3) {
+            setListNameWarning(true);
+        } else {
+            setListNameWarning(false);
+            addList();
+            toggleAddList();
+        }
+    }
+
+    const toggleConfirmationModal = () => {
+        setConfirmationModal(!confirmationModal);
+    }
 
     return (
         <div className="main-div">
@@ -144,9 +199,16 @@ function Menu() {
                     <DragDropContext onDragEnd={handleDragEnd}>
                         <div className="board-div">
                             <h3 className="board-name">{selectedBoard.name}</h3>
-                            <button className="add-list-button">
+                            <button className="add-list-button" onClick={toggleAddList}>
                                 Add List +
                             </button>
+                            {addListClicked ? (<div className="add-list-input-container">
+                                <h3 id="list-name">List name</h3>
+                                <input type="text" className="input" maxLength={22} value={newListName} onChange={(e) => setNewListName(e.target.value)}></input>
+                                <button className="add-button" onClick={handleAddList}>Add</button>
+                                <button className="add-button" onClick={toggleAddList}>Cancel</button>
+                                {listNameWarning ? (<p className="warning">List name must be 3-22 characters long!</p>) : (null)}
+                            </div>) : (null)}
                             <div className="all-list-container">
                                 {lists && lists.map((list, index) => (
                                     <div className="list-container" key={list.id}>
@@ -161,6 +223,7 @@ function Menu() {
                                                     fetchListByBoardId={fetchListByBoardId}
                                                 />
                                             </Modal>
+                                            <button className="list-delete-button" onClick={() => {toggleConfirmationModal(); setDeleteListId(list.id);}}><FontAwesomeIcon icon={faTrash} /></button>
                                         </div>
                                         <Droppable droppableId={list.id.toString()}>
                                             {(provided) => (
@@ -200,6 +263,15 @@ function Menu() {
                 fetchListByBoardId={fetchListByBoardId}
                 boardId={boardId}
             />)}
+            {confirmationModal && (<div className="confirmation-modal-overlay">
+    <div className="confirmation-modal">
+        <h2>Are you sure?</h2>
+        <div>
+        <button onClick={() => {handleDelete()}}>Delete</button>
+        <button onClick={(e) => {e.preventDefault(); setConfirmationModal(false)}}>Cancel</button>
+        </div>
+        </div>
+        </div>)}
         </div>
     );
 }
