@@ -283,3 +283,36 @@
   transform: scale(1.08);
   cursor: pointer;
 }
+
+.list-delete-button {
+  position: relative;
+  background-color:rgb(53, 53, 53);
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: linear 0.2s;
+  height: 5vh;
+  top: 1vh;
+  font-weight: 900;
+}
+
+.list-delete-button:hover {
+  transform:  scale(1.1);
+  background-color:rgba(75, 75, 75, 0.836);
+  color: rgb(255, 0, 0);
+}
+
+.add-list-input-container {
+  position: absolute;
+  right: 0;
+  top: 17vh;
+  height: 20vh;
+  width: 14vw;
+}
+
+#list-name {
+  font-size: 30px;
+  color: aliceblue;
+  margin: 15px;
+  margin-top: 30px;
+}
