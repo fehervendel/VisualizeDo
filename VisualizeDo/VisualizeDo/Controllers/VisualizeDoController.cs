@@ -128,7 +128,27 @@ public class VisualizeDoController : ControllerBase
             return StatusCode(500, "Internal server Error");
         }
     }
-    
+
+    [HttpPut("ChangeBoardName")] //, Authorize(Roles = "Admin")
+    public async Task<IActionResult> ChangeBoardName(int id, string newName)
+    {
+        try
+        {
+            var board = await _boardRepository.GetById(id);
+            if (board == null)
+            {
+                return NotFound("Board with provided id not found");
+            }
+                await _boardRepository.ChangeBoardName(board, newName);
+            return Ok(board);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error changing board name:(");
+            return StatusCode(500, "Internal server Error");
+        }
+    }
+
     [HttpPost("AddList")]
     public async Task<IActionResult> AddList(int boardId, string name)
     {
