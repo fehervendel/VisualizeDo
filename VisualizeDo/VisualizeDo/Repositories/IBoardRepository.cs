@@ -9,4 +9,5 @@ public interface IBoardRepository
     Task Add(Board board);
     Task Update(Board board);
     Task DeleteById(int id);
+    Task ChangeBoardName(Board board, string newName);
 }
