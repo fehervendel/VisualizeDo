@@ -9,6 +9,7 @@ import useModal from "../../Hooks/useModal";
 import Modal from "../../Components/Modal";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 
 
 function Menu() {
@@ -26,6 +27,9 @@ function Menu() {
     const [listNameWarning, setListNameWarning] = useState(false);
     const [confirmationModal, setConfirmationModal] = useState(false);
     const [deleteListId, setDeleteListId] = useState(null);
+    const [boardNameEditClicked, setBoardNameEditClicked] = useState(false);
+    const [newBoardName, setNewBoardName] = useState("");
+    console.log(newBoardName);
     //console.log(selectedBoard);
 
     const fetchBoard = async () => {
@@ -183,6 +187,10 @@ function Menu() {
         setConfirmationModal(!confirmationModal);
     }
 
+    const toggleBoardEditModal = () => {
+        setBoardNameEditClicked(!boardNameEditClicked);
+    }
+
     return (
         <div className="main-div">
             <select className='selectBar' onChange={(e) => handleBoardChange(e)}>
@@ -198,7 +206,10 @@ function Menu() {
                 selectedBoard && (
                     <DragDropContext onDragEnd={handleDragEnd}>
                         <div className="board-div">
+                            <div className="board-name-container">
                             <h3 className="board-name">{selectedBoard.name}</h3>
+                            <button className="board-name-edit-button" onClick={() => toggleBoardEditModal()}><FontAwesomeIcon icon ={faPencilAlt} /></button>
+                            </div>
                             <button className="add-list-button" onClick={toggleAddList}>
                                 Add List +
                             </button>
@@ -269,6 +280,22 @@ function Menu() {
         <div>
         <button onClick={() => {handleDelete()}}>Delete</button>
         <button onClick={(e) => {e.preventDefault(); setConfirmationModal(false)}}>Cancel</button>
+        </div>
+        </div>
+        </div>)}
+        {boardNameEditClicked && (<div className="confirmation-modal-overlay">
+    <div className="confirmation-modal" id="board-name-edit">
+        <h2 id="board-edit-h2">You can edit your board name here, or delete the board!</h2>
+        <div className="board-name-edit-container">
+        <h3>Enter your new board name</h3>
+        <div className="board-name-input">
+            <input type="text" placeholder={selectedBoard.name} onChange={(e) => setNewBoardName(e.target.value)}></input>
+            <button>Save</button>
+        </div>
+        </div>
+        <div className="delete-cancel">
+        <button onClick={() => {handleDelete()}}>Delete</button>
+        <button onClick={(e) => {e.preventDefault(); setBoardNameEditClicked(false); setNewBoardName("")}}>Cancel</button>
         </div>
         </div>
         </div>)}
