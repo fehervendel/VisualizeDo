@@ -58,4 +58,16 @@ public class BoardRepository : IBoardRepository
             await dbContext.SaveChangesAsync();
         }
     }
+
+    public async Task ChangeBoardName(Board board, string newName)
+    {
+        using var dbContext = new VisualizeDoContext();
+        if (board != null)
+        {
+            board.Name = newName;
+            dbContext.Boards.Update(board);
+            await dbContext.SaveChangesAsync();
+        }
+    }
+
 }
