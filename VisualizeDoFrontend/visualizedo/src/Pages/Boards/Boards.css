@@ -316,3 +316,53 @@
   margin: 15px;
   margin-top: 30px;
 }
+
+.board-name-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.board-name-edit-button {
+  background: none;
+  color: aliceblue;
+  height: 40px;
+  width: 40px;
+  font-size: 20px;
+  cursor: pointer;
+  border: none;
+}
+
+.board-name-edit-button:hover{
+  scale: 1.1;
+}
+
+#board-name-edit{
+  height: 35vh;
+  width: 30vw;
+}
+
+#board-edit-h2{
+  position: relative;
+  top: -50px;
+  margin: 10px;
+}
+
+.board-name-input{
+  position: relative;
+  left: 0;
+}
+
+.board-name-edit-container{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  margin-left: 2vw;
+  margin-bottom: 2vh;
+}
+
+.delete-cancel{
+  position: relative;
+  bottom: -30px;
+}
