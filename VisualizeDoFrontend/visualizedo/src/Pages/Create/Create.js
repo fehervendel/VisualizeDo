@@ -94,26 +94,25 @@ function Create() {
 
 
     const handleSave = () => {
-        let savable = true;
+        let titleAndDescriptionOk = true;
+        let selectOk = true;
         if (cardTitle.length < 3 || cardDescription.length < 3) {
             setIsCardInputOk(false);
-            savable = false;
+            titleAndDescriptionOk = false;
         } else {
             setIsCardInputOk(true);
-            savable = true;
+            titleAndDescriptionOk = true;
         }
         if (priority === "Choose priority..." || size === "Choose size...") {
             setIsSelectOk(false);
-            savable = false;
+            selectOk = false;
         } else {
             setIsSelectOk(true);
-            savable = true;
+            selectOk = true;
         }
-        if (savable) {
+        if (selectOk && titleAndDescriptionOk) {
             addBoard();
         }
-
-        // toggleCreateClick();
     }
 
     const handleCancel = () => {
