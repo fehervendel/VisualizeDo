@@ -29,7 +29,6 @@ function Menu() {
     const [deleteListId, setDeleteListId] = useState(null);
     const [boardNameEditClicked, setBoardNameEditClicked] = useState(false);
     const [newBoardName, setNewBoardName] = useState("");
-    console.log(newBoardName);
     //console.log(selectedBoard);
 
     const fetchBoard = async () => {
@@ -50,8 +49,36 @@ function Menu() {
         } catch (err) {
             console.error(err);
         }
-
     };
+
+    const updateBoardName = async () => {
+        try {
+            const response = await fetch(`${API_URL}/VisualizeDo/ChangeBoardName?id=${boardId}&newName=${newBoardName}`, {
+                method: "PUT"
+            });
+            const data = await response.json();
+            console.log(data);
+            setSelectedBoard(data);
+            fetchBoard();
+            toggleBoardEditModal();
+        } catch (e){
+            console.error(e);
+        }
+    }
+
+    const deleteBoard = async () => {
+        try {
+            const response = await fetch(`${API_URL}/VisualizeDo/DeleteBoardById?id=${selectedBoard.id}`, {
+                method: "DELETE"
+            });
+            const data = await response.text();
+            console.log(data);
+            fetchBoard();
+            toggleBoardEditModal();
+        } catch (e) { 
+            console.error(e);
+        }
+    }
 
     useEffect(() => {
         fetchBoard();
@@ -191,6 +218,14 @@ function Menu() {
         setBoardNameEditClicked(!boardNameEditClicked);
     }
 
+    const handleBoardNameChange = () => {
+        updateBoardName();
+    }
+
+    const handleBoardDelete = () => {
+        deleteBoard();
+    }
+
     return (
         <div className="main-div">
             <select className='selectBar' onChange={(e) => handleBoardChange(e)}>
@@ -290,11 +325,11 @@ function Menu() {
         <h3>Enter your new board name</h3>
         <div className="board-name-input">
             <input type="text" placeholder={selectedBoard.name} onChange={(e) => setNewBoardName(e.target.value)}></input>
-            <button>Save</button>
+            <button onClick={handleBoardNameChange}>Save</button>
         </div>
         </div>
         <div className="delete-cancel">
-        <button onClick={() => {handleDelete()}}>Delete</button>
+        <button onClick={() => {handleBoardDelete()}}>Delete</button>
         <button onClick={(e) => {e.preventDefault(); setBoardNameEditClicked(false); setNewBoardName("")}}>Cancel</button>
         </div>
         </div>
