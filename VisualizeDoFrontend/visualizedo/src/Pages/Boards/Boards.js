@@ -30,6 +30,7 @@ function Menu() {
     const [boardNameEditClicked, setBoardNameEditClicked] = useState(false);
     const [newBoardName, setNewBoardName] = useState("");
     const [newBoardNameOk, setNewBoardNameOk] = useState(true);
+    const [boardDeleteConfirmation, setBoardDeleteConfirmation] = useState(false);
     //console.log(selectedBoard);
 
     const fetchBoard = async () => {
@@ -76,6 +77,7 @@ function Menu() {
             console.log(data);
             fetchBoard();
             toggleBoardEditModal();
+            setBoardDeleteConfirmation(false);
         } catch (e) { 
             console.error(e);
         }
@@ -336,8 +338,17 @@ function Menu() {
         </div>
         </div>
         <div className="delete-cancel">
-        <button onClick={() => {handleBoardDelete()}}>Delete</button>
+        <button onClick={() => {setBoardDeleteConfirmation(true)}}>Delete</button>
         <button onClick={(e) => {e.preventDefault(); setBoardNameEditClicked(false); setNewBoardName(""); setNewBoardNameOk(true)}}>Cancel</button>
+        {boardDeleteConfirmation && (<div className="confirmation-modal-overlay">
+    <div className="confirmation-modal">
+        <h2>Are you sure?</h2>
+        <div>
+        <button onClick={() => {handleBoardDelete()}}>Delete</button>
+        <button onClick={(e) => {e.preventDefault(); setBoardDeleteConfirmation(false)}}>Cancel</button>
+        </div>
+        </div>
+        </div>)}
         </div>
         </div>
         </div>)}
