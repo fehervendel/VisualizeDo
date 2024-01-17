@@ -138,8 +138,8 @@ public class VisualizeDoController : ControllerBase
             if (board == null)
             {
                 return NotFound("Board with provided id not found");
-            }
-                await _boardRepository.ChangeBoardName(board, newName);
+            } 
+            await _boardRepository.ChangeBoardName(board, newName);
             return Ok(board);
         }
         catch (Exception e)
@@ -324,6 +324,29 @@ public class VisualizeDoController : ControllerBase
         catch(Exception e)
         {
             _logger.LogError(e, "Error changing List of Card");
+            return StatusCode(500, "Internal server Error");
+        }
+    }
+    
+    [HttpPut("ChangeListName")] //, Authorize(Roles = "Admin, User")
+    public async Task<IActionResult> ChangeListName(int listId, string newName)
+    {
+        try
+        {
+            List list  = await _listRepository.GetById(listId);
+            if (list != null)
+            {
+               await _listRepository.ChangeListName(listId, newName);
+               return Ok($"List with id {listId} changed name to {newName}"); 
+            }
+            else
+            {
+                return NotFound($"List with id {listId} is not found!");
+            }
+        }
+        catch(Exception e)
+        {
+            _logger.LogError(e, "Error changing List name");
             return StatusCode(500, "Internal server Error");
         }
     }
