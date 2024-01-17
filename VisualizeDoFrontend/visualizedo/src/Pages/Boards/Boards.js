@@ -31,6 +31,8 @@ function Menu() {
     const [newBoardName, setNewBoardName] = useState("");
     const [newBoardNameOk, setNewBoardNameOk] = useState(true);
     const [boardDeleteConfirmation, setBoardDeleteConfirmation] = useState(false);
+    const [listNameEditId, setListNameEditId] = useState(null);
+    const [newNameOfList, setNewNameOfList] = useState("");
     //console.log(selectedBoard);
 
     const fetchBoard = async () => {
@@ -63,6 +65,20 @@ function Menu() {
             setSelectedBoard(data);
             fetchBoard();
             toggleBoardEditModal();
+        } catch (e){
+            console.error(e);
+        }
+    }
+
+    const changeListName = async () => {
+        try {
+            const response = await fetch(`${API_URL}/VisualizeDo/ChangeListName?listId=${listNameEditId}&newName=${newNameOfList}`, {
+                method: "PUT"
+            });
+            const data = await response.text();
+            console.log(data);
+            fetchListByBoardId(boardId);
+            setListNameEditId(null);
         } catch (e){
             console.error(e);
         }
@@ -234,6 +250,14 @@ function Menu() {
         deleteBoard();
     }
 
+    const handleListNameChange = () => {
+        if(newNameOfList.length < 3){
+            console.log("wrong new name of list");
+        } else {
+            changeListName();
+        }
+    }
+
     return (
         <div className="main-div">
             <select className='selectBar' onChange={(e) => handleBoardChange(e)}>
@@ -267,7 +291,10 @@ function Menu() {
                                 {lists && lists.map((list, index) => (
                                     <div className="list-container" key={list.id}>
                                         <div className="list-head">
-                                            <h4>{list.name}</h4>
+                                            {listNameEditId === list.id ? (<input type="text" className="list-name-edit-input" value={newNameOfList} onChange={(e) => setNewNameOfList(e.target.value)} maxLength={22}></input>) : (<h4>{list.name}</h4>
+                                            )}
+                                            {listNameEditId === list.id ? (<button className="add-button" id="list-name-save" onClick={handleListNameChange}>Save</button>) : (<button className="list-name-edit-button" onClick={(e) => {e.preventDefault(); setListNameEditId(list.id); setNewNameOfList(list.name)}}><FontAwesomeIcon icon={faPencilAlt}/></button>)}
+                                            
                                             <Modal
                                                 setListId={() => setListId(list.id)}
                                             >
