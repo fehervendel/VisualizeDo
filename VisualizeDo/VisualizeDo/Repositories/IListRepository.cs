@@ -11,4 +11,5 @@ public interface IListRepository
     Task DeleteById(int id);
     Task<List<List>> GetByBoardId(int id);
     Task AddLists(List<List> lists);
+    Task ChangeListName(int listId, string newName);
 }

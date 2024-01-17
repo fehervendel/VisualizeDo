@@ -77,4 +77,16 @@ public class ListRepository : IListRepository
             throw new ArgumentException("Board not found for the provided Board Id");
         }
     }
+
+    public async Task ChangeListName(int listId, string newName)
+    {
+        using var dbContext = new VisualizeDoContext();
+        List? list = await dbContext.Lists.FindAsync(listId);
+        if (list != null)
+        {
+            list.Name = newName;
+            dbContext.Update(list);
+            await dbContext.SaveChangesAsync();
+        }
+    }
 }
