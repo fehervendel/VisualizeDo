@@ -29,6 +29,7 @@ function Menu() {
     const [deleteListId, setDeleteListId] = useState(null);
     const [boardNameEditClicked, setBoardNameEditClicked] = useState(false);
     const [newBoardName, setNewBoardName] = useState("");
+    const [newBoardNameOk, setNewBoardNameOk] = useState(true);
     //console.log(selectedBoard);
 
     const fetchBoard = async () => {
@@ -219,7 +220,12 @@ function Menu() {
     }
 
     const handleBoardNameChange = () => {
-        updateBoardName();
+        if(newBoardName.length < 3){
+            setNewBoardNameOk(false);
+        } else {
+            setNewBoardNameOk(true);
+            updateBoardName();
+        }
     }
 
     const handleBoardDelete = () => {
@@ -324,13 +330,14 @@ function Menu() {
         <div className="board-name-edit-container">
         <h3>Enter your new board name</h3>
         <div className="board-name-input">
-            <input type="text" placeholder={selectedBoard.name} onChange={(e) => setNewBoardName(e.target.value)}></input>
+            <input type="text" placeholder={selectedBoard.name} maxLength={22} onChange={(e) => setNewBoardName(e.target.value)}></input>
             <button onClick={handleBoardNameChange}>Save</button>
+            {newBoardNameOk ? (null) : (<p className="warning">New board name must be 3-22 characters long!</p>)}
         </div>
         </div>
         <div className="delete-cancel">
         <button onClick={() => {handleBoardDelete()}}>Delete</button>
-        <button onClick={(e) => {e.preventDefault(); setBoardNameEditClicked(false); setNewBoardName("")}}>Cancel</button>
+        <button onClick={(e) => {e.preventDefault(); setBoardNameEditClicked(false); setNewBoardName(""); setNewBoardNameOk(true)}}>Cancel</button>
         </div>
         </div>
         </div>)}
