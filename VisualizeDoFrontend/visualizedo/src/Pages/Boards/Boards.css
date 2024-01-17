@@ -366,3 +366,39 @@
   position: relative;
   bottom: -30px;
 }
+
+.list-name-edit-button {
+  margin-right: 5px;
+  margin-left: 5px;
+  position: relative;
+  top: 1.3vh;
+  right: 0vw;
+  background: none;
+  color: aliceblue;
+  height: 40px;
+  width: 40px;
+  font-size: 20px;
+  cursor: pointer;
+  border: none;
+}
+
+.list-name-edit-button:hover{
+  scale: 1.1;
+}
+
+.list-name-edit-input {
+  margin-left: 5px;
+  position: relative;
+  border-radius: 10px;
+  height: 4vh;
+  width: 9vw;
+  top: 1.3vh;
+}
+
+#list-name-save{
+  width: 3vw;
+  padding: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+  padding: 3px;
+}
