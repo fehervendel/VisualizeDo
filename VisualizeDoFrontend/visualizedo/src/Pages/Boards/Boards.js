@@ -10,7 +10,9 @@ import Modal from "../../Components/Modal";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
-
+import { getUserByEmail } from "../../Services/User.service";
+import { useContext } from "react";
+import { ToastContext } from "../../Contexts/ToastContext.context";
 
 function Menu() {
     const token = Cookies.get("userToken");
@@ -35,20 +37,23 @@ function Menu() {
     const [newNameOfList, setNewNameOfList] = useState("");
     //console.log(selectedBoard);
 
+    const { AddToast } = useContext(ToastContext)
+
     const fetchBoard = async () => {
         try {
-            const response = await fetch(`${API_URL}/VisualizeDo/GetUserByEmail?email=${userEmail}`, {
-                method: "GET",
-                headers: {
-                    //Authorization: `Bearer ${token}`
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                },
-            });
-            const jsonData = await response.json();
+            // const response = await fetch(`${API_URL}/VisualizeDo/GetUserByEmail?email=${userEmail}`, {
+            //     method: "GET",
+            //     headers: {
+            //         //Authorization: `Bearer ${token}`
+            //         'Content-Type': 'application/json',
+            //         'Accept': 'application/json',
+            //     },
+            // });
+            // const jsonData = await response.json();
             //console.log("userboards" + jsonData);
-            setBoards(jsonData.boards);
-            const selected = jsonData.boards.find((board) => board.id == selectedBoard?.id);
+            const jsonData = await getUserByEmail()
+            setBoards(jsonData.data.boards);
+            const selected = jsonData.data.boards.find((board) => board.id == selectedBoard?.id);
             setSelectedBoard(selected);
         } catch (err) {
             console.error(err);
@@ -65,7 +70,7 @@ function Menu() {
             setSelectedBoard(data);
             fetchBoard();
             toggleBoardEditModal();
-        } catch (e){
+        } catch (e) {
             console.error(e);
         }
     }
@@ -79,7 +84,7 @@ function Menu() {
             console.log(data);
             fetchListByBoardId(boardId);
             setListNameEditId(null);
-        } catch (e){
+        } catch (e) {
             console.error(e);
         }
     }
@@ -94,7 +99,7 @@ function Menu() {
             fetchBoard();
             toggleBoardEditModal();
             setBoardDeleteConfirmation(false);
-        } catch (e) { 
+        } catch (e) {
             console.error(e);
         }
     }
@@ -105,6 +110,7 @@ function Menu() {
 
     const addList = async () => {
         try {
+          
             const response = await fetch(`${API_URL}/VisualizeDo/AddList?boardId=${boardId}&name=${newListName}`, {
                 method: "POST",
                 headers: {
@@ -116,7 +122,8 @@ function Menu() {
             console.log(data);
             setNewListName("");
             await fetchListByBoardId(boardId);
-
+         
+            AddToast("Hurray, new item added!")
         } catch (err) {
             console.error(err);
         }
@@ -130,7 +137,7 @@ function Menu() {
             const data = await response.text();
             await fetchListByBoardId(boardId);
             toggleConfirmationModal();
-        }  catch (err) {
+        } catch (err) {
             console.error(err.message);
         }
     }
@@ -238,7 +245,7 @@ function Menu() {
     }
 
     const handleBoardNameChange = () => {
-        if(newBoardName.length < 3){
+        if (newBoardName.length < 3) {
             setNewBoardNameOk(false);
         } else {
             setNewBoardNameOk(true);
@@ -251,7 +258,7 @@ function Menu() {
     }
 
     const handleListNameChange = () => {
-        if(newNameOfList.length < 3){
+        if (newNameOfList.length < 3) {
             console.log("wrong new name of list");
         } else {
             changeListName();
@@ -274,8 +281,8 @@ function Menu() {
                     <DragDropContext onDragEnd={handleDragEnd}>
                         <div className="board-div">
                             <div className="board-name-container">
-                            <h3 className="board-name">{selectedBoard.name}</h3>
-                            <button className="board-name-edit-button" onClick={() => toggleBoardEditModal()}><FontAwesomeIcon icon ={faPencilAlt} /></button>
+                                <h3 className="board-name">{selectedBoard.name}</h3>
+                                <button className="board-name-edit-button" onClick={() => toggleBoardEditModal()}><FontAwesomeIcon icon={faPencilAlt} /></button>
                             </div>
                             <button className="add-list-button" onClick={toggleAddList}>
                                 Add List +
@@ -293,8 +300,8 @@ function Menu() {
                                         <div className="list-head">
                                             {listNameEditId === list.id ? (<input type="text" className="list-name-edit-input" value={newNameOfList} onChange={(e) => setNewNameOfList(e.target.value)} maxLength={22}></input>) : (<h4>{list.name}</h4>
                                             )}
-                                            {listNameEditId === list.id ? (<button className="add-button" id="list-name-save" onClick={handleListNameChange}>Save</button>) : (<button className="list-name-edit-button" onClick={(e) => {e.preventDefault(); setListNameEditId(list.id); setNewNameOfList(list.name)}}><FontAwesomeIcon icon={faPencilAlt}/></button>)}
-                                            
+                                            {listNameEditId === list.id ? (<button className="add-button" id="list-name-save" onClick={handleListNameChange}>Save</button>) : (<button className="list-name-edit-button" onClick={(e) => { e.preventDefault(); setListNameEditId(list.id); setNewNameOfList(list.name) }}><FontAwesomeIcon icon={faPencilAlt} /></button>)}
+
                                             <Modal
                                                 setListId={() => setListId(list.id)}
                                             >
@@ -304,7 +311,7 @@ function Menu() {
                                                     fetchListByBoardId={fetchListByBoardId}
                                                 />
                                             </Modal>
-                                            <button className="list-delete-button" onClick={() => {toggleConfirmationModal(); setDeleteListId(list.id);}}><FontAwesomeIcon icon={faTrash} /></button>
+                                            <button className="list-delete-button" onClick={() => { toggleConfirmationModal(); setDeleteListId(list.id); }}><FontAwesomeIcon icon={faTrash} /></button>
                                         </div>
                                         <Droppable droppableId={list.id.toString()}>
                                             {(provided) => (
@@ -345,40 +352,40 @@ function Menu() {
                 boardId={boardId}
             />)}
             {confirmationModal && (<div className="confirmation-modal-overlay">
-    <div className="confirmation-modal">
-        <h2>Are you sure?</h2>
-        <div>
-        <button onClick={() => {handleDelete()}}>Delete</button>
-        <button onClick={(e) => {e.preventDefault(); setConfirmationModal(false)}}>Cancel</button>
-        </div>
-        </div>
-        </div>)}
-        {boardNameEditClicked && (<div className="confirmation-modal-overlay">
-    <div className="confirmation-modal" id="board-name-edit">
-        <h2 id="board-edit-h2">You can edit your board name here, or delete the board!</h2>
-        <div className="board-name-edit-container">
-        <h3>Enter your new board name</h3>
-        <div className="board-name-input">
-            <input type="text" placeholder={selectedBoard.name} maxLength={22} onChange={(e) => setNewBoardName(e.target.value)}></input>
-            <button onClick={handleBoardNameChange}>Save</button>
-            {newBoardNameOk ? (null) : (<p className="warning">New board name must be 3-22 characters long!</p>)}
-        </div>
-        </div>
-        <div className="delete-cancel">
-        <button onClick={() => {setBoardDeleteConfirmation(true)}}>Delete</button>
-        <button onClick={(e) => {e.preventDefault(); setBoardNameEditClicked(false); setNewBoardName(""); setNewBoardNameOk(true)}}>Cancel</button>
-        {boardDeleteConfirmation && (<div className="confirmation-modal-overlay">
-    <div className="confirmation-modal">
-        <h2>Are you sure?</h2>
-        <div>
-        <button onClick={() => {handleBoardDelete()}}>Delete</button>
-        <button onClick={(e) => {e.preventDefault(); setBoardDeleteConfirmation(false)}}>Cancel</button>
-        </div>
-        </div>
-        </div>)}
-        </div>
-        </div>
-        </div>)}
+                <div className="confirmation-modal">
+                    <h2>Are you sure?</h2>
+                    <div>
+                        <button onClick={() => { handleDelete() }}>Delete</button>
+                        <button onClick={(e) => { e.preventDefault(); setConfirmationModal(false) }}>Cancel</button>
+                    </div>
+                </div>
+            </div>)}
+            {boardNameEditClicked && (<div className="confirmation-modal-overlay">
+                <div className="confirmation-modal" id="board-name-edit">
+                    <h2 id="board-edit-h2">You can edit your board name here, or delete the board!</h2>
+                    <div className="board-name-edit-container">
+                        <h3>Enter your new board name</h3>
+                        <div className="board-name-input">
+                            <input type="text" placeholder={selectedBoard.name} maxLength={22} onChange={(e) => setNewBoardName(e.target.value)}></input>
+                            <button onClick={handleBoardNameChange}>Save</button>
+                            {newBoardNameOk ? (null) : (<p className="warning">New board name must be 3-22 characters long!</p>)}
+                        </div>
+                    </div>
+                    <div className="delete-cancel">
+                        <button onClick={() => { setBoardDeleteConfirmation(true) }}>Delete</button>
+                        <button onClick={(e) => { e.preventDefault(); setBoardNameEditClicked(false); setNewBoardName(""); setNewBoardNameOk(true) }}>Cancel</button>
+                        {boardDeleteConfirmation && (<div className="confirmation-modal-overlay">
+                            <div className="confirmation-modal">
+                                <h2>Are you sure?</h2>
+                                <div>
+                                    <button onClick={() => { handleBoardDelete() }}>Delete</button>
+                                    <button onClick={(e) => { e.preventDefault(); setBoardDeleteConfirmation(false) }}>Cancel</button>
+                                </div>
+                            </div>
+                        </div>)}
+                    </div>
+                </div>
+            </div>)}
         </div>
     );
 }
