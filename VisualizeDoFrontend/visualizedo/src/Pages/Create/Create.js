@@ -4,6 +4,9 @@ import { useState } from 'react';
 import API_URL from "../../config";
 import Cookies from "js-cookie";
 import { Navigate, useNavigate } from "react-router-dom";
+import { add } from "../../Services/Card.service";
+import { addNewLists } from "../../Services/List.service";
+import { addNewBoard } from "../../Services/Board.service";
 
 function Create() {
     const [isCreating, setIsCreating] = useState(false);
@@ -30,22 +33,7 @@ function Create() {
 
     const addCard = async (listId) => {
         try {
-            const response = await fetch(`${API_URL}/VisualizeDo/AddCard`, {
-
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    //"Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    listId: listId,
-                    title: cardTitle,
-                    description: cardDescription,
-                    priority: priority,
-                    size: size
-                }),
-            })
-            const data = response.json();
+            const data = await add(listId, cardTitle, cardDescription, priority, size);
             navigate('/Boards');
         } catch (error) {
             console.error("Error:", error);
@@ -54,16 +42,8 @@ function Create() {
 
     const addLists = async (id) => {
         try {
-            const response = await fetch(`${API_URL}/VisualizeDo/AddLists?boardId=${id}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(listNames),
-            });
-            const data = await response.json();
-            console.log(data);
-            const listId = data[0].id;
+            const data = await addNewLists(id, listNames);
+            const listId = data.data[0].id;
             addCard(listId);
         } catch (error) {
             console.error("Error:", error);
@@ -72,26 +52,14 @@ function Create() {
 
     const addBoard = async () => {
         try {
-            const response = await fetch(`${API_URL}/VisualizeDo/AddBoard?email=${userEmail}&name=${boardName}`, {
-
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    //"Authorization": `Bearer ${token}`
-                },
-            })
-            const data = await response.json();
-            console.log(data);
-            let boardId = data.id;
+            const data = await addNewBoard(boardName);
+            let boardId = data.data.id;
             addLists(boardId);
             setBoardName("");
-
         } catch (error) {
             console.error("Error:", error);
         }
     };
-    //https://localhost:7225/VisualizeDo/AddLists?boardId=112323
-
 
     const handleSave = () => {
         let titleAndDescriptionOk = true;
