@@ -1,7 +1,6 @@
 import Cookies from "js-cookie";
 import React, { useState, useEffect } from "react";
 import "./Boards.css";
-import API_URL from "../config";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import AddModal from "../../Components/AddModal";
 import EditModal from "../../Components/EditModal";
@@ -13,6 +12,9 @@ import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import { getUserByEmail } from "../../Services/User.service";
 import { useContext } from "react";
 import { ToastContext } from "../../Contexts/ToastContext.context";
+import { boardNameChange, boardDelete } from "../../Services/Board.service";
+import { listNameChange, addNewList, deleteList, getListByBoardId } from "../../Services/List.service";
+import { changeCardList } from "../../Services/Card.service";
 
 function Menu() {
     const token = Cookies.get("userToken");
@@ -35,22 +37,11 @@ function Menu() {
     const [boardDeleteConfirmation, setBoardDeleteConfirmation] = useState(false);
     const [listNameEditId, setListNameEditId] = useState(null);
     const [newNameOfList, setNewNameOfList] = useState("");
-    //console.log(selectedBoard);
 
     const { AddToast } = useContext(ToastContext)
 
     const fetchBoard = async () => {
         try {
-            // const response = await fetch(`${API_URL}/VisualizeDo/GetUserByEmail?email=${userEmail}`, {
-            //     method: "GET",
-            //     headers: {
-            //         //Authorization: `Bearer ${token}`
-            //         'Content-Type': 'application/json',
-            //         'Accept': 'application/json',
-            //     },
-            // });
-            // const jsonData = await response.json();
-            //console.log("userboards" + jsonData);
             const jsonData = await getUserByEmail()
             setBoards(jsonData.data.boards);
             const selected = jsonData.data.boards.find((board) => board.id == selectedBoard?.id);
@@ -62,12 +53,9 @@ function Menu() {
 
     const updateBoardName = async () => {
         try {
-            const response = await fetch(`${API_URL}/VisualizeDo/ChangeBoardName?id=${boardId}&newName=${newBoardName}`, {
-                method: "PUT"
-            });
-            const data = await response.json();
-            console.log(data);
-            setSelectedBoard(data);
+            const data = await boardNameChange(boardId, newBoardName);
+            console.log(data.data);
+            setSelectedBoard(data.data);
             fetchBoard();
             toggleBoardEditModal();
         } catch (e) {
@@ -77,10 +65,7 @@ function Menu() {
 
     const changeListName = async () => {
         try {
-            const response = await fetch(`${API_URL}/VisualizeDo/ChangeListName?listId=${listNameEditId}&newName=${newNameOfList}`, {
-                method: "PUT"
-            });
-            const data = await response.text();
+            const data = await listNameChange(listNameEditId, newNameOfList);
             console.log(data);
             fetchListByBoardId(boardId);
             setListNameEditId(null);
@@ -91,10 +76,7 @@ function Menu() {
 
     const deleteBoard = async () => {
         try {
-            const response = await fetch(`${API_URL}/VisualizeDo/DeleteBoardById?id=${selectedBoard.id}`, {
-                method: "DELETE"
-            });
-            const data = await response.text();
+            const data = await boardDelete(selectedBoard.id);
             console.log(data);
             fetchBoard();
             toggleBoardEditModal();
@@ -110,20 +92,12 @@ function Menu() {
 
     const addList = async () => {
         try {
-          
-            const response = await fetch(`${API_URL}/VisualizeDo/AddList?boardId=${boardId}&name=${newListName}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    //"Authorization": `Bearer ${token}`
-                },
-            })
-            const data = await response.json();
+            const data = await addNewList(boardId, newListName);
             console.log(data);
             setNewListName("");
             await fetchListByBoardId(boardId);
-         
-            AddToast("Hurray, new item added!")
+
+            AddToast("Hurray, new list added!")
         } catch (err) {
             console.error(err);
         }
@@ -131,10 +105,7 @@ function Menu() {
 
     const handleDelete = async () => {
         try {
-            const response = await fetch(`${API_URL}/VisualizeDo/DeleteListById?id=${deleteListId}`, {
-                method: "DELETE"
-            });
-            const data = await response.text();
+            const data = await deleteList(deleteListId);
             await fetchListByBoardId(boardId);
             toggleConfirmationModal();
         } catch (err) {
@@ -144,20 +115,8 @@ function Menu() {
 
     const fetchListByBoardId = async (id) => {
         try {
-            const response = await fetch(`${API_URL}/VisualizeDo/GetListsByBoardId?id=${id}`, {
-                method: "GET",
-                headers: {
-                    //Authorization: `Bearer ${token}`
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                },
-            });
-            if (response.ok) {
-                const jsonData = await response.json();
-                setLists(jsonData);
-            }
-
-            //console.log("userboards" + jsonData);
+            const data = await getListByBoardId(id);
+            setLists(data.data);
         } catch (err) {
             console.error(err);
         }
@@ -174,26 +133,17 @@ function Menu() {
 
     const changeCardListById = async (cardId, listId) => {
         try {
-            const response = await fetch(`${API_URL}/VisualizeDo/ChangeCardsListById?cardId=${cardId}&listId=${listId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            //console.log("Successful request", response);
+            changeCardList(cardId, listId);
         } catch (err) {
             console.error(err);
         }
     };
 
-
     const handleBoardChange = (e) => {
         const boardId = e.target.value;
         setBoardId(boardId);
-        //console.log(e.target.value);
         const selected = boards.find((board) => board.id == boardId);
         setSelectedBoard(selected);
-        //selectedBoard.lists.map((list) => list.id)
         if (selected != undefined) {
             fetchListByBoardId(boardId);
         }
@@ -206,19 +156,19 @@ function Menu() {
         }
         const cardId = parseInt(result.draggableId);
         const listId = parseInt(destination.droppableId);
-        //card swap logic
-        let tempLists = deepCopyLists(lists);
-        let originalColumn = tempLists.find((list) => list.cards.find((card) => card.id == cardId)); // This is the column where we took a card from
-        let movedCard = originalColumn.cards.find((card) => card.id == cardId); // This is the card we moved
-        let updatedSourceColumn = originalColumn.cards.filter((card) => card.id != cardId); // These are the remaining cards of the column where we took a card from
-        originalColumn.cards = updatedSourceColumn; // Changing the original column to the updated one
 
-        let updatedDestinationColumn = tempLists.find((list) => list.id == listId); // This is the destination column
-        updatedDestinationColumn.cards.splice(destination.index, 0, movedCard); // Here we just add the card to the destination column with the correct index
+        let tempLists = deepCopyLists(lists);
+        let originalColumn = tempLists.find((list) => list.cards.find((card) => card.id == cardId));
+        let movedCard = originalColumn.cards.find((card) => card.id == cardId);
+        let updatedSourceColumn = originalColumn.cards.filter((card) => card.id != cardId);
+
+        originalColumn.cards = updatedSourceColumn;
+
+        let updatedDestinationColumn = tempLists.find((list) => list.id == listId);
+
+        updatedDestinationColumn.cards.splice(destination.index, 0, movedCard);
 
         setLists(tempLists);
-        //card swap logic end
-
         changeCardListById(cardId, listId);
     }
 
