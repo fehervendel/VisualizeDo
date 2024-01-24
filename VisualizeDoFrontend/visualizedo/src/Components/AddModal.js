@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import '../Pages/Boards/Boards.css';
-import API_URL from "../config";
+import { add } from "../Services/Card.service";
 
 
 function AddModal(props) {
@@ -16,23 +16,7 @@ function AddModal(props) {
 
     const addCard = async () => {
         try {
-            const response = await fetch(`${API_URL}/VisualizeDo/AddCard`, {
-
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    //"Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    listId: props.listId,
-                    title: title,
-                    description: description,
-                    priority: priority,
-                    size: size
-                }),
-            })
-            const data = response.json();
-            console.log(data);
+            const data = await add(props.listId, title, description, priority, size);
             props.fetchListByBoardId(props.boardId);
             props.toggleAddModal();
 
