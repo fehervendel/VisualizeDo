@@ -1,4 +1,4 @@
-import API_URL from "../Pages/config.js";
+import API_URL from "../config";
 import Cookies from "js-cookie";
 
 export const getUserByEmail = async () => {

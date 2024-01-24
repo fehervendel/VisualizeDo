@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import '../Pages/Boards/Boards.css';
-import API_URL from "../Pages/config";
+import API_URL from "../config";
 
 
 function AddModal(props) {

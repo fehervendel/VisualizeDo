@@ -1,4 +1,4 @@
-import API_URL from "../Pages/config";
+import API_URL from "../config";
 
 export const boardNameChange = async (boardId, newBoardName) => {
     try {

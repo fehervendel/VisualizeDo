@@ -2,12 +2,9 @@ import React, { useEffect } from "react";
 import Registration from "../../Components/Registration";
 import { useState } from "react";
 import Cookies from "js-cookie";
-import API_URL from "../config";
+import API_URL from "../../config";
 import "./LoginMenu.css";
-import todoList from "../../images/todoList.png"
 import { useNavigate } from "react-router-dom";
-import todoList2 from "../../images/todoList.jpg";
-import todoList3 from "../../images/todoList3.png";
 import screenshot1 from "../../images/screenshot-1.PNG";
 import screenshot2 from "../../images/screenshot-2.PNG";
 import screenshot3 from "../../images/screenshot-3.PNG";

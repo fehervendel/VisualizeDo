@@ -1,7 +1,7 @@
 import React from "react";
 import "./Create.css"
 import { useState } from 'react';
-import API_URL from "../config";
+import API_URL from "../../config";
 import Cookies from "js-cookie";
 import { Navigate, useNavigate } from "react-router-dom";
 

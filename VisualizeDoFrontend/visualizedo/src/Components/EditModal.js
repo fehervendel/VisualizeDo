@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import API_URL from "../Pages/config";
+import API_URL from "../config";
 import '../Pages/Boards/Boards.css';
 
 function EditModal(props) {
