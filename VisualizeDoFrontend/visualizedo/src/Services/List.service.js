@@ -58,3 +58,19 @@ export const getListByBoardId = async (id) => {
         return { status: 500, data: err}
     }
 };
+
+export const addNewLists = async (id, listNames) => {
+    try {
+        const response = await fetch(`${API_URL}/VisualizeDo/AddLists?boardId=${id}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(listNames),
+        });
+        const data = await response.json();
+        return {status: response.status, data: data}
+    } catch (err) {
+        return { status: 500, data: err}
+    }
+};
