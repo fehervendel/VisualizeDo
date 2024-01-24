@@ -44,3 +44,48 @@
 :root {
   --xl: "550px";
 }
+
+
+.toastContainer {
+  position: absolute;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  right: 0dvw;
+  bottom: 10dvh;
+  height: auto;
+  width: auto;
+}
+
+@keyframes floatInAndOut {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  10% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  90% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+.toastItem {
+  width: 20dvw;
+  height: 4rem;
+  background-color: rgb(64, 64, 85);
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  animation: floatInAndOut var(--duration);
+}
+
