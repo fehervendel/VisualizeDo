@@ -15,9 +15,6 @@ export const getUserByEmail = async () => {
         const jsonData = await response.json();
 
         return { status: response.status, data: jsonData }
-        // setBoards(jsonData.boards);
-        // const selected = jsonData.boards.find((board) => board.id == selectedBoard?.id);
-        // setSelectedBoard(selected);
     } catch (err) {
         return { status: 500, data: err }
     }
