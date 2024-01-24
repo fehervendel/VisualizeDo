@@ -1,6 +1,5 @@
 import React from "react";
 import { useState } from "react";
-import API_URL from "../config";
 import '../Pages/Boards/Boards.css';
 import { editCard, deleteCard } from "../Services/Card.service";
 
@@ -26,9 +25,6 @@ function EditModal(props) {
 
   const deleteCardById = async () => {
     try {
-      const response = await fetch(`${API_URL}/VisualizeDo/DeleteCardById?id=${props.card.id}`, {
-        method: 'DELETE',
-      });
       const data = await deleteCard(props.card.id);
       props.fetchListByBoardId(props.boardId);
       toggleConfirmationModal();
