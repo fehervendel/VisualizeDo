@@ -43,6 +43,7 @@
 
 :root {
   --xl: "550px";
+  overflow: hidden;
 }
 
 
@@ -79,13 +80,23 @@
 }
 
 .toastItem {
-  width: 20dvw;
+  width: 15dvw;
   height: 4rem;
-  background-color: rgb(64, 64, 85);
+  background-color: rgba(21, 255, 0, 0.6);
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
   animation: floatInAndOut var(--duration);
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  padding: 5px;
+  padding-left: 15px;
+  margin-top: 2.5px;
+  margin-bottom: 2.5px;
+}
+
+.toast-message {
+  font-weight: 800;
 }
 
