@@ -2,6 +2,8 @@ import React from "react";
 import { useState } from "react";
 import '../Pages/Boards/Boards.css';
 import { add } from "../Services/Card.service";
+import { useContext } from "react";
+import { ToastContext } from "../Contexts/ToastContext.context";
 
 
 function AddModal(props) {
@@ -13,13 +15,14 @@ function AddModal(props) {
     const [size, setSize] = useState("");
     const [warnings, setWarnings] = useState([]);
     const [isError, setIsError] = useState(false);
+    const { AddToast } = useContext(ToastContext);
 
     const addCard = async () => {
         try {
             const data = await add(props.listId, title, description, priority, size);
             props.fetchListByBoardId(props.boardId);
             props.toggleAddModal();
-
+            AddToast("Cardd added successfully!");
         } catch (error) {
             console.error("Error:", error);
         }

@@ -7,6 +7,8 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { add } from "../../Services/Card.service";
 import { addNewLists } from "../../Services/List.service";
 import { addNewBoard } from "../../Services/Board.service";
+import { useContext } from "react";
+import { ToastContext } from "../../Contexts/ToastContext.context";
 
 function Create() {
     const [isCreating, setIsCreating] = useState(false);
@@ -27,6 +29,8 @@ function Create() {
     const [isSelectOk, setIsSelectOk] = useState(true);
     const navigate = useNavigate();
 
+    const { AddToast } = useContext(ToastContext);
+
     function toggleCreateClick() {
         setIsCreating(!isCreating);
     }
@@ -34,7 +38,9 @@ function Create() {
     const addCard = async (listId) => {
         try {
             const data = await add(listId, cardTitle, cardDescription, priority, size);
+
             navigate('/Boards');
+            AddToast("Board created successfully!");
         } catch (error) {
             console.error("Error:", error);
         }

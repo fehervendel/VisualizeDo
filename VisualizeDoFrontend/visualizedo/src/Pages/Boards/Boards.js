@@ -81,6 +81,7 @@ function Menu() {
             fetchBoard();
             toggleBoardEditModal();
             setBoardDeleteConfirmation(false);
+            AddToast("Board deleted!");
         } catch (e) {
             console.error(e);
         }
@@ -97,7 +98,7 @@ function Menu() {
             setNewListName("");
             await fetchListByBoardId(boardId);
 
-            AddToast("Hurray, new list added!")
+            AddToast("New list added succesfully!")
         } catch (err) {
             console.error(err);
         }
@@ -108,6 +109,7 @@ function Menu() {
             const data = await deleteList(deleteListId);
             await fetchListByBoardId(boardId);
             toggleConfirmationModal();
+            AddToast("List deleted!");
         } catch (err) {
             console.error(err.message);
         }
@@ -209,7 +211,7 @@ function Menu() {
 
     const handleListNameChange = () => {
         if (newNameOfList.length < 3) {
-            console.log("wrong new name of list");
+            AddToast("List name must be at least 3 characters long!");
         } else {
             changeListName();
         }
@@ -239,7 +241,7 @@ function Menu() {
                             </button>
                             {addListClicked ? (<div className="add-list-input-container">
                                 <h3 id="list-name">List name</h3>
-                                <input type="text" className="input" maxLength={22} value={newListName} onChange={(e) => setNewListName(e.target.value)}></input>
+                                <input type="text" className="input" maxLength={18} value={newListName} onChange={(e) => setNewListName(e.target.value)}></input>
                                 <button className="add-button" onClick={handleAddList}>Add</button>
                                 <button className="add-button" onClick={toggleAddList}>Cancel</button>
                                 {listNameWarning ? (<p className="warning">List name must be 3-22 characters long!</p>) : (null)}
@@ -248,7 +250,7 @@ function Menu() {
                                 {lists && lists.map((list, index) => (
                                     <div className="list-container" key={list.id}>
                                         <div className="list-head">
-                                            {listNameEditId === list.id ? (<input type="text" className="list-name-edit-input" value={newNameOfList} onChange={(e) => setNewNameOfList(e.target.value)} maxLength={22}></input>) : (<h4>{list.name}</h4>
+                                            {listNameEditId === list.id ? (<input type="text" className="list-name-edit-input" value={newNameOfList} onChange={(e) => setNewNameOfList(e.target.value)} maxLength={18}></input>) : (<h4>{list.name}</h4>
                                             )}
                                             {listNameEditId === list.id ? (<button className="add-button" id="list-name-save" onClick={handleListNameChange}>Save</button>) : (<button className="list-name-edit-button" onClick={(e) => { e.preventDefault(); setListNameEditId(list.id); setNewNameOfList(list.name) }}><FontAwesomeIcon icon={faPencilAlt} /></button>)}
 
@@ -315,9 +317,9 @@ function Menu() {
                     <h2 id="board-edit-h2">You can edit your board name here, or delete the board!</h2>
                     <div className="board-name-edit-container">
                         <h3>Enter your new board name</h3>
-                        <div className="board-name-input">
-                            <input type="text" placeholder={selectedBoard.name} maxLength={22} onChange={(e) => setNewBoardName(e.target.value)}></input>
-                            <button onClick={handleBoardNameChange}>Save</button>
+                        <div className="board-name-inputs">
+                            <input className="board-name-input" type="text" placeholder={selectedBoard.name} maxLength={18} onChange={(e) => setNewBoardName(e.target.value)}></input>
+                            <button className="board-name-save-button" onClick={handleBoardNameChange}>Save</button>
                             {newBoardNameOk ? (null) : (<p className="warning">New board name must be 3-22 characters long!</p>)}
                         </div>
                     </div>

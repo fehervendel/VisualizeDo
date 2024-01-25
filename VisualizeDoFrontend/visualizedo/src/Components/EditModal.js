@@ -2,6 +2,8 @@ import React from "react";
 import { useState } from "react";
 import '../Pages/Boards/Boards.css';
 import { editCard, deleteCard } from "../Services/Card.service";
+import { useContext } from "react";
+import { ToastContext } from "../Contexts/ToastContext.context";
 
 function EditModal(props) {
   const priorities = ["Urgent", "High", "Medium", "Low"];
@@ -11,6 +13,7 @@ function EditModal(props) {
   const [description, setDescription] = useState(props.card.description);
   const [priority, setPriority] = useState(props.card.priority);
   const [size, setSize] = useState(props.card.size);
+  const { AddToast } = useContext(ToastContext);
 
   const handleSave = async () => {
     try {
@@ -29,6 +32,7 @@ function EditModal(props) {
       props.fetchListByBoardId(props.boardId);
       toggleConfirmationModal();
       props.toggleEditModal();
+      AddToast("Card deleted!");
     } catch (error) {
       console.error('Error deleting card', error);
     }
