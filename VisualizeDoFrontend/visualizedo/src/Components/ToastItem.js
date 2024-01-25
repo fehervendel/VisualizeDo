@@ -4,7 +4,7 @@ import { useEffect } from "react"
 export default function ToastItem({toast, RemoveToast}) {
 
     let timeOut = null;
-    const duration = 3000;
+    const duration = 5000;
     const durationForScss = `${duration/1000}s`;
 
     useEffect(() => {
@@ -20,8 +20,8 @@ export default function ToastItem({toast, RemoveToast}) {
     
 
     return(
-        <div className="toastItem" style={{ "--duration": {durationForScss} }}>
-            <h3>{toast.message}</h3>
+        <div className="toastItem" style={{ "--duration": durationForScss }}>
+            <h3 className="toast-message">{toast.message}</h3>
         </div>
     )
 }
