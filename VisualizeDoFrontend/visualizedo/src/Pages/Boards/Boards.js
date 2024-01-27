@@ -28,7 +28,6 @@ function Menu() {
     const { toggleModal: toggleEditModal, show: showEditModal } = useModal();
     const [addListClicked, setAddListClicked] = useState(false);
     const [newListName, setNewListName] = useState("");
-    const [listNameWarning, setListNameWarning] = useState(false);
     const [confirmationModal, setConfirmationModal] = useState(false);
     const [deleteListId, setDeleteListId] = useState(null);
     const [boardNameEditClicked, setBoardNameEditClicked] = useState(false);
@@ -180,9 +179,8 @@ function Menu() {
 
     const handleAddList = () => {
         if (newListName.length < 3) {
-            setListNameWarning(true);
+            AddToast("List name must be at least 3 characters long!");
         } else {
-            setListNameWarning(false);
             addList();
             toggleAddList();
         }
@@ -244,7 +242,6 @@ function Menu() {
                                 <input type="text" className="input" maxLength={18} value={newListName} onChange={(e) => setNewListName(e.target.value)}></input>
                                 <button className="add-button" onClick={handleAddList}>Add</button>
                                 <button className="add-button" onClick={toggleAddList}>Cancel</button>
-                                {listNameWarning ? (<p className="warning">List name must be 3-22 characters long!</p>) : (null)}
                             </div>) : (null)}
                             <div className="all-list-container">
                                 {lists && lists.map((list, index) => (
