@@ -183,3 +183,6 @@ async Task CreateAdminIfNotExists()
         }
     }
 }
+
+public partial class Program
+{ }

@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualizeDo", "VisualizeDo\VisualizeDo.csproj", "{7F2DA8F2-F33A-419A-A6F4-A8AC6F439711}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualizeDoTest", "VisualizeDoTest\VisualizeDoTest.csproj", "{029AB698-5395-4931-A086-00801AE150FA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{7F2DA8F2-F33A-419A-A6F4-A8AC6F439711}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F2DA8F2-F33A-419A-A6F4-A8AC6F439711}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F2DA8F2-F33A-419A-A6F4-A8AC6F439711}.Release|Any CPU.Build.0 = Release|Any CPU
+		{029AB698-5395-4931-A086-00801AE150FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{029AB698-5395-4931-A086-00801AE150FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{029AB698-5395-4931-A086-00801AE150FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{029AB698-5395-4931-A086-00801AE150FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
