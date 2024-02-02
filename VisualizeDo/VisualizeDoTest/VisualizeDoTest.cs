@@ -28,7 +28,7 @@ public class VisualizeDoTest : WebApplicationFactory<Program>
     {
         DotNetEnv.Env.Load();
         string connectionString = DotNetEnv.Env.GetString("CONNECTION_STRING");
-        Environment.SetEnvironmentVariable("CONNECTION_STRING", connectionString);
+        Environment.SetEnvironmentVariable("CONNECTION_STRING", "Server=localhost,1433;Database=VisualizeDo;User Id=sa;Password=Feher2023vendeL!;");
         var options = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
@@ -47,17 +47,24 @@ public class VisualizeDoTest : WebApplicationFactory<Program>
 
         _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
         
-        InitializeTestUserByEmail();
+        await InitializeTestUserByEmail();
     }
     
     [OneTimeTearDown]
     public void TearDown()
     {
-        _client.Dispose();
-        _context.Dispose();
+        if (_client != null)
+        {
+            _client.Dispose();
+        }
+
+        if (_context != null)
+        {
+             _context.Dispose();
+        }
     }
 
-    private async void InitializeTestUserByEmail()
+    private async Task InitializeTestUserByEmail()
     {
         User testUser = await CheckTestUser();
         if (testUser == null)
@@ -80,6 +87,11 @@ public class VisualizeDoTest : WebApplicationFactory<Program>
             response.EnsureSuccessStatusCode();
 
             var content = await response.Content.ReadAsStringAsync();
+
+            if (string.IsNullOrWhiteSpace(content))
+            {
+                return null;
+            }
             var options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
@@ -89,7 +101,7 @@ public class VisualizeDoTest : WebApplicationFactory<Program>
         }
         catch (HttpRequestException ex)
         {
-            return new User();
+            return null;
         }
     }
 
