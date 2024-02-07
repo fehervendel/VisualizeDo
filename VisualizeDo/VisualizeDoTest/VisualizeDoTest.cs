@@ -1,32 +1,23 @@
-using System.Text;
 using System.Text.Json;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Net.Http.Headers;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
-using Moq;
-using Sprache;
-using VisualizeDo.Context;
-using VisualizeDo.Contracts;
-using VisualizeDo.Controllers;
 using VisualizeDo.Models;
-using VisualizeDo.Models.DTOs;
-using VisualizeDo.Repositories;
-using VisualizeDo.Services.Authentication;
 using List = VisualizeDo.Models.List;
-using MediaTypeHeaderValue = System.Net.Http.Headers.MediaTypeHeaderValue;
+
 
 namespace VisualizeDoTest;
 [TestFixture]
 public class VisualizeDoTest : WebApplicationFactory<Program>
 {
     private HttpClient _client;
-    private VisualizeDoContext _context;
+    
     private User? _user;
     private Board? _board;
     private List? _list;
     private Card? _card;
+    private JsonSerializerOptions _options = new JsonSerializerOptions
+    {
+        PropertyNameCaseInsensitive = true
+    };
 
     private TestPrepare _testPrepare = new TestPrepare();
 
@@ -39,25 +30,37 @@ public class VisualizeDoTest : WebApplicationFactory<Program>
         
         _client = CreateClient();
         await _testPrepare.Prepare();
+        _user = _testPrepare.User;
+        _board = _testPrepare.Board;
+        _list = _testPrepare.List;
+        _card = _testPrepare.Card;
+        // TestContext.Progress.WriteLine(_user.Name);
+        // TestContext.Progress.WriteLine(_board.Name);
     }
     
     [OneTimeTearDown]
     public void TearDown()
     {
-        if (_client != null)
-        {
-            _client.Dispose();
-        }
-
-        if (_context != null)
-        {
-             _context.Dispose();
-        }
+        _client.Dispose();
     }
     
     
     [Test]
-    public void Test1()
+    public async Task GetUserByEmailReturnsOk()
     {
+        var apiUrl = $"/VisualizeDo/GetUserByEmail?email={_user.EmailAddress}";
+        var response = await _client.GetAsync(apiUrl);
+
+        response.EnsureSuccessStatusCode();
+
+        
+        var content = await response.Content.ReadAsStringAsync();
+        var user = JsonSerializer.Deserialize<User>(content, _options);
+        
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
+        Assert.IsNotNull(user);
+        Assert.That(user.Id, Is.EqualTo(_user.Id));
+        //Assert.That(user.Boards[0].Lists[0].Cards[0], Is.DeepEqualTo(_user.Boards[0].Lists[0].Cards[0])); //HOW
+        Assert.That(user.Name, Is.EqualTo(_user.Name));
     }
 }
