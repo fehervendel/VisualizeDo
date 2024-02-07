@@ -59,9 +59,9 @@ public class VisualizeDoController : ControllerBase
     [HttpGet("GetUserByEmail")]//, Authorize(Roles = "User, Admin")
     public async Task<ActionResult<User>> GetUserByEmail(string email)
     {
-        var user = await _userRepository.GetByEmail(email);
         try
         {
+            var user = await _userRepository.GetByEmail(email);
             return Ok(user);
         }
         catch (Exception e)
