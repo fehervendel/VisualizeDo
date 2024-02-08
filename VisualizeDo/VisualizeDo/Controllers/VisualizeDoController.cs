@@ -365,6 +365,21 @@ public class VisualizeDoController : ControllerBase
             return StatusCode(500, "Internal server Error");
         }
     }
+    
+    [HttpDelete("DeleteUserById")]//, Authorize(Roles = "Admin")
+    public async Task<IActionResult> DeleteUserById(int id)
+    {
+        try
+        {
+            await _userRepository.Delete(id);
+            return Ok($"User with id: {id} has been deleted!");
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error deleting user:(");
+            return StatusCode(500, "Internal server Error");
+        }
+    }
 
     [HttpPut("EditCard")]//, Authorize(Roles = "Admin")
     public async Task<IActionResult> EditCard([FromBody] EditCard editCard)
