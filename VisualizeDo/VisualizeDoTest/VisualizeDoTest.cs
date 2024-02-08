@@ -21,7 +21,7 @@ public class VisualizeDoTest : WebApplicationFactory<Program>
         PropertyNameCaseInsensitive = true
     };
 
-    private TestPrepare _testPrepare = new TestPrepare();
+    private readonly TestPrepare _testPrepare = new TestPrepare();
 
     [SetUp]
     public async Task Setup()
@@ -32,6 +32,14 @@ public class VisualizeDoTest : WebApplicationFactory<Program>
             "Server=localhost,1433;Database=VisualizeDo;User Id=sa;Password=Feher2023vendeL!;");
 
         _client = CreateClient();
+
+        if (_user != null)
+        {
+            string apiUrl = $"/VisualizeDo/DeleteUserById?id={_user.Id}";
+                    var response = await _client.DeleteAsync(apiUrl);
+                    response.EnsureSuccessStatusCode();
+        }
+
         await _testPrepare.Prepare();
         _user = _testPrepare.User;
         _board = _testPrepare.Board;
