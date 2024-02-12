@@ -1,3 +1,4 @@
+using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
 using VisualizeDo.Models;
@@ -45,8 +46,6 @@ public class VisualizeDoTest : WebApplicationFactory<Program>
         _board = _testPrepare.Board;
         _list = _testPrepare.List;
         _card = _testPrepare.Card;
-        // TestContext.Progress.WriteLine(_user.Name);
-        // TestContext.Progress.WriteLine(_board.Name);
     }
 
     [OneTimeTearDown]
@@ -71,7 +70,6 @@ public class VisualizeDoTest : WebApplicationFactory<Program>
         Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
         Assert.IsNotNull(user);
         Assert.That(user.Id, Is.EqualTo(_user.Id));
-        //Assert.That(user.Boards[0].Lists[0].Cards[0], Is.DeepEqualTo(_user.Boards[0].Lists[0].Cards[0])); //HOW
         Assert.That(user.Name, Is.EqualTo(_user.Name));
     }
 
@@ -115,5 +113,179 @@ public class VisualizeDoTest : WebApplicationFactory<Program>
         var apiUrl = $"/VisualizeDo/DeleteBoardById?id={boardId}";
         var response = await _client.DeleteAsync(apiUrl);
         response.EnsureSuccessStatusCode();
+    }
+    
+    [Test]
+    public async Task AddNewBoardShouldReturnNotFound()
+    {
+        string boardName = "AddBoardTestNotFound";
+        var apiUrl = $"/VisualizeDo/AddBoard?email={-1}&name={boardName}";
+        var response = await _client.PostAsync(apiUrl, null);
+        
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.NotFound));
+    }
+    
+    [Test]
+    public async Task GetBoardByIdShouldReturnOk()
+    {
+        var apiUrl = $"/VisualizeDo/GetBoardById?id={_board.Id}";
+        var response = await _client.GetAsync(apiUrl);
+
+        response.EnsureSuccessStatusCode();
+
+
+        var content = await response.Content.ReadAsStringAsync();
+        var board = JsonSerializer.Deserialize<Board>(content, _options);
+
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
+        Assert.IsNotNull(board);
+        Assert.That(board.Id, Is.EqualTo(_board.Id));
+        Assert.That(board.Name, Is.EqualTo(_board.Name));
+    }
+    
+    [Test]
+    public async Task GetBoardByIdShouldReturnNoContent()
+    {
+        var apiUrl = $"/VisualizeDo/GetBoardById?id={-1}";
+        var response = await _client.GetAsync(apiUrl);
+
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.NoContent));
+    }
+    
+    [Test]
+    public async Task DeleteBoardByIdShouldReturnOk()
+    {
+        var userBoardsLength = _user.Boards.Count;
+        var apiUrl = $"/VisualizeDo/DeleteBoardById?id={_board.Id}";
+        var response = await _client.DeleteAsync(apiUrl);
+
+        response.EnsureSuccessStatusCode();
+        
+        var userApiUrl = $"/VisualizeDo/GetUserByEmail?email={_user.EmailAddress}";
+        var userResponse = await _client.GetAsync(userApiUrl);
+
+        userResponse.EnsureSuccessStatusCode();
+
+
+        var userContent = await userResponse.Content.ReadAsStringAsync();
+        var user = JsonSerializer.Deserialize<User>(userContent, _options);
+        
+
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
+        Assert.That(user.Boards.Count, Is.EqualTo(userBoardsLength));
+    }
+    
+    [Test]
+    public async Task DeleteBoardByIdShouldReturnNotFound()
+    {
+        var apiUrl = $"/VisualizeDo/DeleteBoardById?id={-1}";
+        var response = await _client.DeleteAsync(apiUrl);
+
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.NotFound));
+    }
+    
+    [Test]
+    public async Task ChangeBoardNameShouldReturnOk()
+    {
+        var apiUrl = $"/VisualizeDo/ChangeBoardName?id={_board.Id}&newName=BoardNameChangeTest";
+        var response = await _client.PutAsync(apiUrl, null);
+
+        response.EnsureSuccessStatusCode();
+        
+        var content = await response.Content.ReadAsStringAsync();
+        var board = JsonSerializer.Deserialize<Board>(content, _options);
+
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
+        Assert.That(board.Name, Is.EqualTo("BoardNameChangeTest"));
+    }
+    
+    [Test]
+    public async Task ChangeBoardNameShouldReturnNotFound()
+    {
+        var apiUrl = $"/VisualizeDo/ChangeBoardName?id={-1}&newName=BoardNameChangeTest";
+        var response = await _client.PutAsync(apiUrl, null);
+
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.NotFound));
+    }
+    
+    [Test]
+    public async Task AddListShouldReturnOk()
+    {
+        var apiUrl = $"/VisualizeDo/AddList?boardId={_board.Id}&name=AddListTest";
+        var response = await _client.PostAsync(apiUrl, null);
+
+        response.EnsureSuccessStatusCode();
+        
+        var content = await response.Content.ReadAsStringAsync();
+        var list = JsonSerializer.Deserialize<List>(content, _options);
+
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
+        Assert.That(list.Name, Is.EqualTo("AddListTest"));
+
+        var cleanUpUrl = $"/VisualizeDo/DeleteListById?id={list.Id}";
+        var cleanUpResponse = await _client.DeleteAsync(cleanUpUrl);
+        cleanUpResponse.EnsureSuccessStatusCode();
+    }
+    
+    [Test]
+    public async Task AddListShouldReturnNotFound()
+    {
+        var apiUrl = $"/VisualizeDo/AddList?boardId={-1}&name=AddListTest";
+        var response = await _client.PostAsync(apiUrl, null);
+        
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.NotFound));
+    }
+    
+    [Test]
+    public async Task AddListsShouldReturnOk()
+    {
+        List<string> testLists = new List<string>
+        {
+            new string("AddListsTest1"),
+            new string("AddListsTest2"),
+            new string("AddListsTest3")
+        };
+        
+        string json = JsonSerializer.Serialize(testLists);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        var apiUrl = $"/VisualizeDo/AddLists?boardId={_board.Id}";
+        var response = await _client.PostAsync(apiUrl, content);
+
+        response.EnsureSuccessStatusCode();
+
+        var responseContent = await response.Content.ReadAsStringAsync();
+        List<List> returnedLists = JsonSerializer.Deserialize<List<List>>(responseContent, _options);
+
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
+        Assert.That(returnedLists.Count, Is.EqualTo(testLists.Count));
+        Assert.That(returnedLists.Any(l => l.Name == testLists[0]), Is.True);
+        Assert.That(returnedLists.Any(l => l.Name == testLists[1]), Is.True);
+        Assert.That(returnedLists.Any(l => l.Name == testLists[2]), Is.True);
+
+        for (int i = 0; i < testLists.Count; i++)
+        {
+            var cleanUpUrl = $"/VisualizeDo/DeleteListById?id={returnedLists[i].Id}";
+            var cleanUpResponse = await _client.DeleteAsync(cleanUpUrl);
+
+            cleanUpResponse.EnsureSuccessStatusCode();
+        }
+    }
+    
+    [Test]
+    public async Task AddListsShouldReturnError()
+    {
+        List<string> testLists = new List<string>
+        {
+            new string("AddListsTest1"),
+            new string("AddListsTest2"),
+            new string("AddListsTest3")
+        };
+        
+        string json = JsonSerializer.Serialize(testLists);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        var apiUrl = $"/VisualizeDo/AddLists?boardId={-1}";
+        var response = await _client.PostAsync(apiUrl, content);
+
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.NotFound));
     }
 }
