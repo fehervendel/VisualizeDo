@@ -145,7 +145,7 @@ public class VisualizeDoController : ControllerBase
             var board = await _boardRepository.GetById(id);
             if (board == null)
             {
-                return NotFound("Board with provided id not found");
+                return NotFound($"Board with id {id} not found");
             } 
             await _boardRepository.ChangeBoardName(board, newName);
             return Ok(board);
@@ -165,7 +165,7 @@ public class VisualizeDoController : ControllerBase
             var board = await _boardRepository.GetById(boardId);
             if (boardId == null)
             {
-                return NotFound("Board not found");
+                return NotFound($"Board with id {boardId} not found");
             }
             List listToAdd = new List
             {
@@ -181,7 +181,7 @@ public class VisualizeDoController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, "Error adding new list :("); 
-            return StatusCode(500, "Internal Server Error");
+            return NotFound($"Board with id {boardId} not found");
         }
     }
     
@@ -191,9 +191,9 @@ public class VisualizeDoController : ControllerBase
         try
         {
             var board = await _boardRepository.GetById(boardId);
-            if (boardId == null)
+            if (board == null)
             {
-                return NotFound("Board not found");
+                return NotFound($"Board with id {boardId} not found");
             }
 
             List<List> listsToAdd = new List<List>();
