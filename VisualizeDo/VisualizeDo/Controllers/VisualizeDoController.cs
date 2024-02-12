@@ -119,8 +119,16 @@ public class VisualizeDoController : ControllerBase
     {
         try
         {
-            await _boardRepository.DeleteById(id);
-            return Ok($"Board with id: {id} has been deleted!");
+            Board board = await _boardRepository.GetById(id);
+            if (board != null)
+            {
+               await _boardRepository.DeleteById(id);
+               return Ok($"Board with id: {id} has been deleted!"); 
+            }
+            else
+            {
+                return NotFound($"Board with id {id} not found!");
+            }
         }
         catch (Exception e)
         {
