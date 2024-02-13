@@ -46,6 +46,7 @@ public class VisualizeDoTest : WebApplicationFactory<Program>
         _board = _testPrepare.Board;
         _list = _testPrepare.List;
         _card = _testPrepare.Card;
+
     }
 
     [OneTimeTearDown]
@@ -100,7 +101,7 @@ public class VisualizeDoTest : WebApplicationFactory<Program>
 
         var content = await response.Content.ReadAsStringAsync();
         var board = JsonSerializer.Deserialize<Board>(content, _options);
-
+        
         Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
         Assert.IsNotNull(board);
         Assert.That(board.Name, Is.EqualTo(boardName));
@@ -136,11 +137,12 @@ public class VisualizeDoTest : WebApplicationFactory<Program>
 
         var content = await response.Content.ReadAsStringAsync();
         var board = JsonSerializer.Deserialize<Board>(content, _options);
-
         Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
         Assert.IsNotNull(board);
         Assert.That(board.Id, Is.EqualTo(_board.Id));
+        Assert.That(board.UserId, Is.EqualTo(_board.UserId));
         Assert.That(board.Name, Is.EqualTo(_board.Name));
+        Assert.That(board.User, Is.EqualTo(_board.User));
     }
     
     [Test]
@@ -285,6 +287,30 @@ public class VisualizeDoTest : WebApplicationFactory<Program>
         var content = new StringContent(json, Encoding.UTF8, "application/json");
         var apiUrl = $"/VisualizeDo/AddLists?boardId={-1}";
         var response = await _client.PostAsync(apiUrl, content);
+
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.NotFound));
+    }
+    
+    [Test]
+    public async Task GetListByIdShouldReturnOk()
+    {
+        var apiUrl = $"/VisualizeDo/GetListById?id={_list.Id}";
+        var response = await _client.GetAsync(apiUrl);
+
+        response.EnsureSuccessStatusCode();
+        
+        var content = await response.Content.ReadAsStringAsync();
+        var list = JsonSerializer.Deserialize<List>(content, _options);
+
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
+        Assert.That(list.Name, Is.EqualTo(_list.Name));
+    }
+    
+    [Test]
+    public async Task GetListByIdShouldReturnNotFound()
+    {
+        var apiUrl = $"/VisualizeDo/GetListById?id={-1}";
+        var response = await _client.GetAsync(apiUrl);
 
         Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.NotFound));
     }
