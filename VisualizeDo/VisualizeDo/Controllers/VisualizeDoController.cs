@@ -223,10 +223,18 @@ public class VisualizeDoController : ControllerBase
     [HttpGet("GetListById")]//, Authorize(Roles = "User, Admin")
     public async Task<IActionResult> GetListById(int id)
     {
-        var list = await _listRepository.GetById(id);
+        
         try
         {
-            return Ok(list);
+            var list = await _listRepository.GetById(id);
+            if (list != null)
+            {
+                return Ok(list);
+            }
+            else
+            {
+                throw new Exception($"List with id {id} not found");
+            }
         }
         catch (Exception e)
         {
