@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Net.Security;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Sprache;
 using VisualizeDo.Context;
 using VisualizeDo.Models;
 
@@ -52,15 +54,22 @@ public class UserRepository : IUserRepository
         {
             var stringId = userToDelete?.IdentityUserId;
             var identityUser = await _userManager.FindByIdAsync(stringId);
-            
-            userToDelete.IdentityUserId = null;
-            
-            await dbContext.SaveChangesAsync();
 
-            var result = await _userManager.DeleteAsync(identityUser);
+            if (identityUser != null)
+            {
+                var result = await _userManager.DeleteAsync(identityUser);
 
-            dbContext.Remove(userToDelete);
+                if (!result.Succeeded)
+                {
+                    throw new Exception("Error deleting identity user from userRepository");
+                }
+            }
 
+            // userToDelete.IdentityUserId = null;
+            //
+            // await dbContext.SaveChangesAsync();
+
+            //dbContext.Remove(userToDelete);
             await dbContext.SaveChangesAsync();
         }
     }
