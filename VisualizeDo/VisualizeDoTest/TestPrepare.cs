@@ -80,7 +80,9 @@ public class TestPrepare : WebApplicationFactory<Program>
     {
         if (User.Boards == null || User.Boards.Count == 0 || User.Boards[0] == null)
         {
-            Board = await CreateTestBoard();
+            Board boardToAdd = await CreateTestBoard();
+            User.Boards.Add(boardToAdd);
+            Board = User.Boards[0];
         }
         else
         {
@@ -92,7 +94,9 @@ public class TestPrepare : WebApplicationFactory<Program>
     {
         if (Board.Lists == null || Board.Lists.Count == 0 || Board.Lists[0] == null)
         {
-            List = await CreateList();
+            List listToAdd = await CreateList();
+            Board.Lists = new List<List>{listToAdd};
+            List = listToAdd;
         }
         else
         {
@@ -104,7 +108,9 @@ public class TestPrepare : WebApplicationFactory<Program>
     {
         if (List.Cards == null || List.Cards.Count == 0 || List.Cards[0] == null)
         {
-            Card = await CreateCard();
+            Card cardToAdd = await CreateCard();
+            List.Cards = new List<Card> { cardToAdd };
+            Card = cardToAdd;
         }
         else
         {
@@ -124,7 +130,7 @@ public class TestPrepare : WebApplicationFactory<Program>
         var responseContent = await response.Content.ReadAsStringAsync(); 
         Board? board = JsonSerializer.Deserialize<Board>(responseContent, options);
 
-        Board = board;
+        //User.Boards[0] = board;
         return board;
     }
 
@@ -140,8 +146,8 @@ public class TestPrepare : WebApplicationFactory<Program>
 
         var responseContent = await response.Content.ReadAsStringAsync();
         var list = JsonSerializer.Deserialize<List>(responseContent, options);
-
-        List = list;
+            
+        //User.Boards[0].Lists[0] = list;
         return list;
     }
     
@@ -172,7 +178,7 @@ public class TestPrepare : WebApplicationFactory<Program>
         var responseContent = await response.Content.ReadAsStringAsync();
         var card = JsonSerializer.Deserialize<Card>(responseContent, options);
 
-        Card = card;
+        //User.Boards[0].Lists[0].Cards[0] = card;
 
         return card;
     }
