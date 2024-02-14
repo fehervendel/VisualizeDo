@@ -143,6 +143,7 @@ public class VisualizeDoTest : WebApplicationFactory<Program>
         Assert.That(board.UserId, Is.EqualTo(_board.UserId));
         Assert.That(board.Name, Is.EqualTo(_board.Name));
         Assert.That(board.User, Is.EqualTo(_board.User));
+        Assert.That(board.Lists.Count, Is.EqualTo(_board.Lists.Count));
     }
     
     [Test]
@@ -174,7 +175,7 @@ public class VisualizeDoTest : WebApplicationFactory<Program>
         
 
         Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
-        Assert.That(user.Boards.Count, Is.EqualTo(userBoardsLength));
+        Assert.That(user.Boards.Count, Is.EqualTo(userBoardsLength - 1));
     }
     
     [Test]
@@ -304,6 +305,7 @@ public class VisualizeDoTest : WebApplicationFactory<Program>
 
         Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
         Assert.That(list.Name, Is.EqualTo(_list.Name));
+        Assert.That(list.Cards.Count, Is.EqualTo(_list.Cards.Count));
     }
     
     [Test]
