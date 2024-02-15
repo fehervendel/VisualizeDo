@@ -342,4 +342,33 @@ public class VisualizeDoTest : WebApplicationFactory<Program>
         Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.NotFound));
     }
     
+    [Test]
+    public async Task DeleteListByIdShouldReturnOk()
+    {
+        int listsCount = _board.Lists.Count;
+        var apiUrl = $"/VisualizeDo/DeleteListById?id={_list.Id}";
+        var response = await _client.DeleteAsync(apiUrl);
+
+        response.EnsureSuccessStatusCode();
+
+        var boardApiUrl = $"/VisualizeDo/GetBoardById?id={_board.Id}";
+        var boardResponse = await _client.GetAsync(boardApiUrl);
+
+        response.EnsureSuccessStatusCode();
+
+        var boardContent = await boardResponse.Content.ReadAsStringAsync();
+        Board? board = JsonSerializer.Deserialize<Board>(boardContent, _options);
+
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
+        Assert.That(board.Lists.Count, Is.EqualTo(listsCount - 1));
+    }
+    
+    [Test]
+    public async Task DeleteListByIdShouldReturnNotFound()
+    {
+        var apiUrl = $"/VisualizeDo/DeleteListById?id={-1}";
+        var response = await _client.DeleteAsync(apiUrl);
+
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.NotFound));
+    }
 }
