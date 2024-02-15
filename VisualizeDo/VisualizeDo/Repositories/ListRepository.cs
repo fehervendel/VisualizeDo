@@ -21,7 +21,15 @@ public class ListRepository : IListRepository
     public async Task<List<List>> GetByBoardId(int id)
     {
         using var dbContext = new VisualizeDoContext();
-        return await dbContext.Lists.Include(l => l.Cards).Where(l => l.BoardId == id).ToListAsync();
+        Board? board = await dbContext.Boards.FindAsync(id);
+        if (board != null)
+        {
+            return await dbContext.Lists.Include(l => l.Cards).Where(l => l.BoardId == id).ToListAsync(); 
+        }
+        else
+        {
+            return null;
+        }
     }
 
     public async Task Add(List list)

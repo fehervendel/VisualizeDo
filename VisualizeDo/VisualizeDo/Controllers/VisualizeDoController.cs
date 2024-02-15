@@ -246,10 +246,17 @@ public class VisualizeDoController : ControllerBase
     [HttpGet("GetListsByBoardId")]//, Authorize(Roles = "User, Admin")
     public async Task<IActionResult> GetListByBoardId(int id)
     {
-        var list = await _listRepository.GetByBoardId(id);
         try
         {
-            return Ok(list);
+            var lists = await _listRepository.GetByBoardId(id);
+            if (lists != null || lists.Count != 0)
+            {
+                 return Ok(lists);
+            }
+            else
+            {
+                throw new Exception($"Board with id {id} not found");
+            }
         }
         catch (Exception e)
         {
