@@ -440,4 +440,53 @@ public class VisualizeDoTest : WebApplicationFactory<Program>
 
         Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.NotFound));
     }
+    
+    [Test]
+    public async Task ChangeCardsListByIdShouldReturnOk()
+    {
+        var listApiUrl = $"/VisualizeDo/AddList?boardId={_board.Id}&name=ChangeCardsListTest";
+        var listResponse = await _client.PostAsync(listApiUrl, null);
+
+        listResponse.EnsureSuccessStatusCode();
+        
+        var listContent = await listResponse.Content.ReadAsStringAsync();
+        var list = JsonSerializer.Deserialize<List>(listContent, _options);
+        
+        
+        var apiUrl = $"/VisualizeDo/ChangeCardsListById?cardId={_card.Id}&listId={list.Id}";
+        var response = await _client.PutAsync(apiUrl, null);
+
+        response.EnsureSuccessStatusCode();
+        
+        var content = await response.Content.ReadAsStringAsync();
+        var card = JsonSerializer.Deserialize<Card>(content, _options);
+
+        Assert.That(card.ListId, Is.EqualTo(list.Id));
+        
+        var cleanUpUrl = $"/VisualizeDo/DeleteListById?id={list.Id}";
+        var cleanUpResponse = await _client.DeleteAsync(cleanUpUrl);
+        cleanUpResponse.EnsureSuccessStatusCode();
+    }
+    
+    [Test]
+    public async Task ChangeCardsListByIdShouldReturnNotFound()
+    {
+        var listApiUrl = $"/VisualizeDo/AddList?boardId={_board.Id}&name=ChangeCardsListTest";
+        var listResponse = await _client.PostAsync(listApiUrl, null);
+
+        listResponse.EnsureSuccessStatusCode();
+        
+        var listContent = await listResponse.Content.ReadAsStringAsync();
+        var list = JsonSerializer.Deserialize<List>(listContent, _options);
+        
+        
+        var apiUrl = $"/VisualizeDo/ChangeCardsListById?cardId={-1}&listId={-1}";
+        var response = await _client.PutAsync(apiUrl, null);
+
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.NotFound));
+        
+        var cleanUpUrl = $"/VisualizeDo/DeleteListById?id={list.Id}";
+        var cleanUpResponse = await _client.DeleteAsync(cleanUpUrl);
+        cleanUpResponse.EnsureSuccessStatusCode();
+    }
 }
