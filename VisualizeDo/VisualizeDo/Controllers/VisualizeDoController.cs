@@ -296,7 +296,7 @@ public class VisualizeDoController : ControllerBase
             var list = await _listRepository.GetById(card.ListId);
             if (list == null)
             {
-                return NotFound("Board not found");
+                return NotFound($"List with id {card.ListId} not found");
             }
             Card cardToAdd = new Card
             {
@@ -322,10 +322,17 @@ public class VisualizeDoController : ControllerBase
     [HttpGet("GetCardById")]//, Authorize(Roles = "User, Admin")
     public async Task<IActionResult> GetCardById(int id)
     {
-        var card = await _cardRepository.GetById(id);
         try
         {
-            return Ok(card);
+            var card = await _cardRepository.GetById(id);
+            if (card != null)
+            {
+                return Ok(card);
+            }
+            else
+            {
+                return NotFound($"Card with id {id} not found");
+            }
         }
         catch (Exception e)
         {
