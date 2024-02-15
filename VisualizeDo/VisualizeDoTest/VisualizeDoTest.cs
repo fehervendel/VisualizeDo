@@ -316,4 +316,30 @@ public class VisualizeDoTest : WebApplicationFactory<Program>
 
         Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.NotFound));
     }
+    
+    [Test]
+    public async Task GetListsByBoardIdShouldReturnOk()
+    {
+        var apiUrl = $"/VisualizeDo/GetListsByBoardId?id={_board.Id}";
+        var response = await _client.GetAsync(apiUrl);
+
+        response.EnsureSuccessStatusCode();
+        
+        var content = await response.Content.ReadAsStringAsync();
+        var lists = JsonSerializer.Deserialize<List<List>>(content, _options);
+
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
+        Assert.IsNotNull(lists);
+        Assert.That(lists.Count, Is.EqualTo(_board.Lists.Count));
+    }
+    
+    [Test]
+    public async Task GetListsByBoardIdShouldReturnNotFound()
+    {
+        var apiUrl = $"/VisualizeDo/GetListsByBoardId?id={-1}";
+        var response = await _client.GetAsync(apiUrl);
+
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.NotFound));
+    }
+    
 }
