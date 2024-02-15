@@ -347,12 +347,21 @@ public class VisualizeDoController : ControllerBase
         try
         {
             await _cardRepository.ChangeList(cardId, listId);
-            return Ok();
+            var list = _listRepository.GetById(listId);
+            var card = await _cardRepository.GetById(cardId);
+            if (card != null && list != null)
+            {
+                return Ok(card);
+            }
+            else
+            {
+                return NotFound($"Card with id {cardId} or list with id {listId} not found");
+            }
         }
         catch(Exception e)
         {
             _logger.LogError(e, "Error changing List of Card");
-            return StatusCode(500, "Internal server Error");
+            return NotFound($"Card with id {cardId} or list with id {listId} not found");
         }
     }
     
