@@ -51,9 +51,6 @@ public class CardRepository : ICardRepository
         {
             dbContext.Remove(cardToDelete);
             await dbContext.SaveChangesAsync();
-        } else
-        {
-            throw new ArgumentException("Card or not found for provided Id");
         }
     }
 
@@ -90,10 +87,6 @@ public class CardRepository : ICardRepository
             cardToEdit.Size = size;
             dbContext.Update(cardToEdit);
             await dbContext.SaveChangesAsync();
-        }
-        else
-        {
-            throw new ArgumentException("Edit failed on card with the provided Id");
         }
     }
 }
