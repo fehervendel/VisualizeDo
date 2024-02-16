@@ -7,7 +7,6 @@ using List = VisualizeDo.Models.List;
 using MediaTypeHeaderValue = System.Net.Http.Headers.MediaTypeHeaderValue;
 
 namespace VisualizeDoTest;
-
 public class TestPrepare : WebApplicationFactory<Program>
 {
     public User? User;
@@ -25,7 +24,6 @@ public class TestPrepare : WebApplicationFactory<Program>
         await InitializeTestCard();
     }
     
-
     private async Task InitializeTestUserByEmail()
     {
         User testUser = await CheckTestUser();
@@ -129,8 +127,7 @@ public class TestPrepare : WebApplicationFactory<Program>
         };
         var responseContent = await response.Content.ReadAsStringAsync(); 
         Board? board = JsonSerializer.Deserialize<Board>(responseContent, options);
-
-        //User.Boards[0] = board;
+        
         return board;
     }
 
@@ -146,8 +143,7 @@ public class TestPrepare : WebApplicationFactory<Program>
 
         var responseContent = await response.Content.ReadAsStringAsync();
         var list = JsonSerializer.Deserialize<List>(responseContent, options);
-            
-        //User.Boards[0].Lists[0] = list;
+        
         return list;
     }
     
@@ -177,9 +173,7 @@ public class TestPrepare : WebApplicationFactory<Program>
 
         var responseContent = await response.Content.ReadAsStringAsync();
         var card = JsonSerializer.Deserialize<Card>(responseContent, options);
-
-        //User.Boards[0].Lists[0].Cards[0] = card;
-
+        
         return card;
     }
 }
