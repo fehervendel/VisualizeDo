@@ -6,7 +6,6 @@ using VisualizeDo.Models;
 using VisualizeDo.Models.DTOs;
 using List = VisualizeDo.Models.List;
 
-
 namespace VisualizeDoTest;
 
 [TestFixture]
@@ -55,8 +54,7 @@ public class VisualizeDoTest : WebApplicationFactory<Program>
     {
         _client.Dispose();
     }
-
-
+    
     [Test]
     public async Task GetUserByEmailReturnsOk()
     {
@@ -134,8 +132,7 @@ public class VisualizeDoTest : WebApplicationFactory<Program>
         var response = await _client.GetAsync(apiUrl);
 
         response.EnsureSuccessStatusCode();
-
-
+        
         var content = await response.Content.ReadAsStringAsync();
         var board = JsonSerializer.Deserialize<Board>(content, _options);
         Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
