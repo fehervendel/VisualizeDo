@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Newtonsoft.Json.Serialization;
 using VisualizeDo.Models;
 using VisualizeDo.Models.DTOs;
 using List = VisualizeDo.Models.List;
@@ -39,7 +40,6 @@ public class VisualizeDoTest : WebApplicationFactory<Program>
         {
             string apiUrl = $"/VisualizeDo/DeleteUserById?id={_user.Id}";
                     var response = await _client.DeleteAsync(apiUrl);
-                    response.EnsureSuccessStatusCode();
         }
 
         await _testPrepare.Prepare();
@@ -461,6 +461,7 @@ public class VisualizeDoTest : WebApplicationFactory<Program>
         var content = await response.Content.ReadAsStringAsync();
         var card = JsonSerializer.Deserialize<Card>(content, _options);
 
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
         Assert.That(card.ListId, Is.EqualTo(list.Id));
         
         var cleanUpUrl = $"/VisualizeDo/DeleteListById?id={list.Id}";
@@ -488,5 +489,131 @@ public class VisualizeDoTest : WebApplicationFactory<Program>
         var cleanUpUrl = $"/VisualizeDo/DeleteListById?id={list.Id}";
         var cleanUpResponse = await _client.DeleteAsync(cleanUpUrl);
         cleanUpResponse.EnsureSuccessStatusCode();
+    }
+    
+    [Test]
+    public async Task ChangeListNameShouldReturnOk()
+    {
+        var apiUrl = $"/VisualizeDo/ChangeListName?listId={_list.Id}&newName=ChangeListNameTest";
+        var response = await _client.PutAsync(apiUrl, null);
+
+        response.EnsureSuccessStatusCode();
+        
+        var content = await response.Content.ReadAsStringAsync();
+        var list = JsonSerializer.Deserialize<List>(content, _options);
+
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
+        Assert.That(list.Name, Is.EqualTo("ChangeListNameTest"));
+    }
+    
+    [Test]
+    public async Task ChangeListNameShouldReturnNotFound()
+    {
+        var apiUrl = $"/VisualizeDo/ChangeListName?listId={-1}&newName=ChangeListNameTest";
+        var response = await _client.PutAsync(apiUrl, null);
+
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.NotFound));
+    }
+
+    [Test]
+    public async Task DeleteCardByIdShouldReturnOk()
+    {
+        var apiUrl = $"/VisualizeDo/DeleteCardById?id={_card.Id}";
+        var response = await _client.DeleteAsync(apiUrl);
+
+        response.EnsureSuccessStatusCode();
+
+        var listApiUrl = $"/VisualizeDo/GetListById?id={_list.Id}";
+        var listResponse = await _client.GetAsync(listApiUrl);
+
+        listResponse.EnsureSuccessStatusCode();
+
+        var listResponseContent = await listResponse.Content.ReadAsStringAsync();
+        List? list = JsonSerializer.Deserialize<List>(listResponseContent);
+        
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
+        Assert.That(list.Cards, Is.EqualTo(null));
+    }
+    
+    [Test]
+    public async Task DeleteCardByIdShouldReturnNotFound()
+    {
+        var apiUrl = $"/VisualizeDo/DeleteCardById?id={-1}";
+        var response = await _client.DeleteAsync(apiUrl);
+
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.NotFound));
+    }
+    
+    [Test]
+    public async Task DeleteUserByIdShouldReturnOk()
+    {
+        var apiUrl = $"/VisualizeDo/DeleteUserById?id={_user.Id}";
+        var response = await _client.DeleteAsync(apiUrl);
+
+        response.EnsureSuccessStatusCode();
+
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
+    }
+    
+    [Test]
+    public async Task DeleteUserByIdShouldReturnNotFound()
+    {
+        var apiUrl = $"/VisualizeDo/DeleteUserById?id={-1}";
+        var response = await _client.DeleteAsync(apiUrl);
+        
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.NotFound));
+    }
+    
+    [Test]
+    public async Task EditCardShouldReturnOk()
+    {
+        EditCard editData = new EditCard
+        (
+            _card.Id,
+            "EditCardTest",
+            "EditCardTestDescription", 
+            "Low",
+            "Small"
+        );
+        var jsonContent = JsonSerializer.Serialize(editData);
+        var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+        var apiUrl = $"/VisualizeDo/EditCard";
+        var response = await _client.PutAsync(apiUrl, content);
+    
+        response.EnsureSuccessStatusCode();
+        
+        var cardApiUrl = $"/VisualizeDo/GetCardById?id={_card.Id}";
+        var cardResponse = await _client.GetAsync(cardApiUrl);
+    
+        response.EnsureSuccessStatusCode();
+        
+        var cardContent = await cardResponse.Content.ReadAsStringAsync();
+        var card = JsonSerializer.Deserialize<Card>(cardContent, _options);
+        
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
+        Assert.That(card.Id, Is.EqualTo(_card.Id));
+        Assert.That(card.Title, Is.EqualTo("EditCardTest"));
+        Assert.That(card.Description, Is.EqualTo("EditCardTestDescription"));
+        Assert.That(card.Priority, Is.EqualTo("Low"));
+        Assert.That(card.Size, Is.EqualTo("Small"));
+    }
+    
+    [Test]
+    public async Task EditCardShouldReturnNotFound()
+    {
+        EditCard editData = new EditCard
+        (
+            -1,
+            "EditCardTest",
+            "EditCardTestDescription", 
+            "Low",
+            "Small"
+        );
+        var jsonContent = JsonSerializer.Serialize(editData);
+        var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+        var apiUrl = $"/VisualizeDo/EditCard";
+        var response = await _client.PutAsync(apiUrl, content);
+        
+        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.NotFound));
     }
 }
