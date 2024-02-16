@@ -374,7 +374,8 @@ public class VisualizeDoController : ControllerBase
             if (list != null)
             {
                await _listRepository.ChangeListName(listId, newName);
-               return Ok($"List with id {listId} changed name to {newName}"); 
+               var listWithNewName = await _listRepository.GetById(listId);
+               return Ok(listWithNewName); 
             }
             else
             {
@@ -393,8 +394,16 @@ public class VisualizeDoController : ControllerBase
     {
         try
         {
-            await _cardRepository.DeleteById(id);
-            return Ok($"Card with id: {id} has been deleted!");
+            Card card = await _cardRepository.GetById(id);
+            if (card != null)
+            {
+               await _cardRepository.DeleteById(id);
+               return Ok($"Card with id: {id} has been deleted!"); 
+            }
+            else
+            {
+                return NotFound($"Card with id {id} not found");
+            }
         }
         catch (Exception e)
         {
@@ -408,8 +417,16 @@ public class VisualizeDoController : ControllerBase
     {
         try
         {
-            await _userRepository.Delete(id);
-            return Ok($"User with id: {id} has been deleted!");
+            User? userToDelete = await _userRepository.GetById(id);
+            if (userToDelete != null)
+            {
+                await _userRepository.Delete(id);
+                return Ok($"User with id: {id} has been deleted!");
+            }
+            else
+            {
+                return NotFound($"User with id {id} not found");
+            }
         }
         catch (Exception e)
         {
@@ -423,9 +440,16 @@ public class VisualizeDoController : ControllerBase
     {
         try
         {
-            await _cardRepository.EditCard(editCard.Id, editCard.Title, editCard.Description, editCard.Priority,
-                editCard.Size);
-            return Ok("Card has been successfully updated!");
+            Card cardToEdit = await _cardRepository.GetById(editCard.Id);
+            if (cardToEdit != null)
+            {
+                await _cardRepository.EditCard(editCard.Id, editCard.Title, editCard.Description, editCard.Priority, editCard.Size);
+                return Ok("Card has been successfully updated!");
+            }
+            else
+            {
+                return NotFound($"Card with id {editCard.Id} not found");
+            }
         }
         catch (Exception e)
         {
