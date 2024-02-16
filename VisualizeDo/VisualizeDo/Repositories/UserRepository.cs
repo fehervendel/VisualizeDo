@@ -56,20 +56,9 @@ public class UserRepository : IUserRepository
             var identityUser = await _userManager.FindByIdAsync(stringId);
 
             if (identityUser != null)
-            {
-                var result = await _userManager.DeleteAsync(identityUser);
-
-                if (!result.Succeeded)
-                {
-                    throw new Exception("Error deleting identity user from userRepository");
-                }
-            }
-
-            // userToDelete.IdentityUserId = null;
-            //
-            // await dbContext.SaveChangesAsync();
-
-            //dbContext.Remove(userToDelete);
+            { 
+                await _userManager.DeleteAsync(identityUser);
+            } 
             await dbContext.SaveChangesAsync();
         }
     }
