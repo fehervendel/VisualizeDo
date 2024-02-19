@@ -1,9 +1,11 @@
 using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Serialization;
 using VisualizeDo.Models;
 using VisualizeDo.Models.DTOs;
+using IConfiguration = Castle.Core.Configuration.IConfiguration;
 using List = VisualizeDo.Models.List;
 
 namespace VisualizeDoTest;
@@ -28,10 +30,12 @@ public class VisualizeDoTest : WebApplicationFactory<Program>
     [SetUp]
     public async Task Setup()
     {
-        DotNetEnv.Env.Load();
-        string connectionString = DotNetEnv.Env.GetString("CONNECTION_STRING");
-        Environment.SetEnvironmentVariable("CONNECTION_STRING",
-            "Server=localhost,1433;Database=VisualizeDo;User Id=sa;Password=Feher2023vendeL!;");
+        IConfigurationRoot configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true).Build();
+        
+        string connectionString = configuration.GetConnectionString("Db1");
+            Environment.SetEnvironmentVariable("CONNECTION_STRING",
+            connectionString);
 
         _client = CreateClient();
 
